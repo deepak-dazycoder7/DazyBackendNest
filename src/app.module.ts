@@ -4,6 +4,7 @@ import { UsersModule } from './users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule} from '@nestjs/typeorm'
 import { UserEntity } from './users/entity/user.entities';
+import { CommonModule } from './common/common.module';
 
 
 @Module({
@@ -20,7 +21,8 @@ import { UserEntity } from './users/entity/user.entities';
     }),
     AuthModule, 
     UsersModule,
-    ConfigModule.forRoot()
+    ConfigModule.forRoot(),
+    CommonModule,
   ],
   controllers: [],
   providers: [],
