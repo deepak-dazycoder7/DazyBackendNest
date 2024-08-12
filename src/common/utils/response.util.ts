@@ -1,21 +1,16 @@
 import { ResponseDto } from '../dtos/response.dto';
 
-export function createResponse<T>(
-    message: string,
-    status: number,
-    error: boolean,
-    data: T | null,
-    token?: string,
-    errorMessage?: string,
-): ResponseDto<T | null> {
+const successCode = [200, 201];
+
+export function returnResponse(
+    message,
+    status,
+    data
+): ResponseDto {
     return {
         message,
         status,
-        error,
-        data: {
-            user: data ?? null,
-            token: token ?? undefined,
-        },
-        errorMessage: errorMessage ?? undefined,
+        data,
+        error: !successCode.includes(status), // Inverse logic: error should be true if status is not in successCode
     };
 }

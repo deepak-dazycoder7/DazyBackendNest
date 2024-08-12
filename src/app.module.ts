@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
+import { AuthModule } from 'src/modules/auth/auth.module';
+import { UsersModule } from 'src/modules/users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule} from '@nestjs/typeorm'
-import { UserEntity } from './users/entity/user.entities';
 import { CommonModule } from './common/common.module';
+import { UserEntity } from './entity/user.entities';
 
 
 @Module({

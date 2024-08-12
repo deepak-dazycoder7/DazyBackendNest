@@ -1,10 +1,7 @@
-export class ResponseDto<T> {
+export class ResponseDto {
     message: string;
     status: number;
     error: boolean;
-    data: {
-        user: T;
-        token?: string;
-    };
-    errorMessage?: string;
-}
+    data: any | null;
+  }
+  

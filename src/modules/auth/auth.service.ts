@@ -1,15 +1,18 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { SignInDto } from './dtos/auth.signIn.dto';
-import { UserEntity } from 'src/users/entity/user.entities';
-import { UserRepository } from 'src/users/entity/user.repository';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { UserEntity } from 'src/entity/user.entities';
+import { UserRepository } from 'src/entity/user.repository';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private userRepository: UserRepository,
-    private jwtService: JwtService,
+    @InjectRepository(UserEntity)
+    private userRepository: Repository<UserEntity>,
+    private jwtService : JwtService
   ) {}
 
   //SignIn validation
@@ -19,13 +22,13 @@ export class AuthService {
     const user = await this.userRepository.findOne({ where: { email } });
 
     if (!user) {
-      throw new UnauthorizedException('User not found');
+      throw new NotFoundException('User not found');
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new NotFoundException('Invalid credentials');
     }
     return user;
   }

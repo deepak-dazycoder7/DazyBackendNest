@@ -9,14 +9,13 @@ export class HttpExceptionFilter implements ExceptionFilter {
         const response = ctx.getResponse<Response>();
         const status = exception.getStatus();
         const exceptionResponse = exception.getResponse();
-        const errorMessage = typeof exceptionResponse === 'string' ? exceptionResponse : (exceptionResponse as any).message;
+        const message = typeof exceptionResponse === 'string' ? exceptionResponse : (exceptionResponse as any).message;
 
-        const responseDto: ResponseDto<null> = {
-            message: 'An error occurred',
+        const responseDto: ResponseDto = {
+            message,
             status,
             error: true,
             data: null,
-            errorMessage,
         };
 
         response
