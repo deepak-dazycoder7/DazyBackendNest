@@ -3,7 +3,6 @@ import { SignInDto } from './dtos/auth.signIn.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from 'src/entity/user.entities';
-import { UserRepository } from 'src/entity/user.repository';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 
@@ -12,30 +11,32 @@ export class AuthService {
   constructor(
     @InjectRepository(UserEntity)
     private userRepository: Repository<UserEntity>,
-    private jwtService : JwtService
+    private jwtService: JwtService
   ) {}
 
-  //SignIn validation
+  // SignIn validation
   async SignIn(signinDto: SignInDto): Promise<UserEntity> {
     const { email, password } = signinDto;
-
+  
     const user = await this.userRepository.findOne({ where: { email } });
-
+  
     if (!user) {
       throw new NotFoundException('User not found');
     }
-
+  
     const isPasswordValid = await bcrypt.compare(password, user.password);
-
+  
     if (!isPasswordValid) {
       throw new NotFoundException('Invalid credentials');
     }
+  
     return user;
   }
+  
 
-   // Generate a JWT token for the user
-   async generateToken(user: UserEntity): Promise<string> {
-    const payload = { email: user.email, sub: user.id }; 
+  // Generate a JWT token for the user
+  async generateToken(user: UserEntity): Promise<string> {
+    const payload = { email: user.email, sub: user.id };
     return this.jwtService.sign(payload);
-}
+  }
 }

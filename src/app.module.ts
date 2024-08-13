@@ -5,12 +5,16 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule} from '@nestjs/typeorm'
 import { CommonModule } from './common/common.module';
 import { UserEntity } from './entity/user.entities';
-import { APP_FILTER } from "@nestjs/core";
+import { APP_FILTER, APP_GUARD } from "@nestjs/core";
 import { AllExceptionsFilter } from "src/exceptionFilter/http-exception.filter";
+import { JwtAuthGuard } from './guards/jwt.auth.guard';
 
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true, 
+    }),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.DATABASE_HOST ||'localhost',
@@ -21,12 +25,15 @@ import { AllExceptionsFilter } from "src/exceptionFilter/http-exception.filter";
       entities: [UserEntity],
       synchronize: true,
     }),
-    AuthModule, 
+    AuthModule,
     UsersModule,
     ConfigModule.forRoot(),
     CommonModule,
   ],
   controllers: [],
-  providers: [ { provide: APP_FILTER, useClass: AllExceptionsFilter },],
+  providers: [
+     { provide: APP_FILTER, useClass: AllExceptionsFilter },
+     { provide: APP_GUARD, useClass: JwtAuthGuard },
+    ],
 })
 export class AppModule {}

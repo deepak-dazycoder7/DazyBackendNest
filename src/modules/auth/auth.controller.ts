@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignInDto } from './dtos/auth.signIn.dto';
+import { Public } from 'src/decorators/publice.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -15,22 +16,23 @@ export class AuthController {
     @Inject('CREATE_RESPONSE') private readonly returnResponse,
   ) {}
 
+  @Public()
   @Post('sign-in')
   async login(@Body() signinDto: SignInDto): Promise<any> {
-    try {
-      const user = await this.authService.SignIn(signinDto);
-      const token = await this.authService.generateToken(user);
-      return this.returnResponse('User SignIned Successfully', 200, {user, token});
-    } catch (error) {
-      if (error instanceof UnauthorizedException) {
-        return this.returnResponse(
-          error.message,
-          401,
-          null,
-        );
-      }
+  try {
+    const user = await this.authService.SignIn(signinDto);
+    const token = await this.authService.generateToken(user);
 
-      throw error;
+    const { password, ...sanitizedUser } = user;
+
+    return this.returnResponse('User signed in successfully', 201, { user: sanitizedUser, token });
+  } catch (error) {
+    if (error instanceof UnauthorizedException) {
+      return this.returnResponse(error.message, 401, null);
     }
+
+    throw error;
   }
+}
+
 }
