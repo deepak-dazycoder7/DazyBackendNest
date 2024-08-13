@@ -19,7 +19,6 @@ export class CreateUserDto {
   @Matches(/^(?=.*[0-9])(?=.*[@#$%^&*])[a-zA-Z0-9@#$%^&*]{6,}$/, {
     message: 'Password must be at least 6 characters long and contain at least one number and one special character',
   })
-  
   password: string;
 
   @IsString()

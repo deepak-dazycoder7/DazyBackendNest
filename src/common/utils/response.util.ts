@@ -11,6 +11,6 @@ export function returnResponse(
         message,
         status,
         data,
-        error: !successCode.includes(status), // Inverse logic: error should be true if status is not in successCode
+        error: !successCode.includes(status)
     };
 }

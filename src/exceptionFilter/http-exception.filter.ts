@@ -1,25 +1,50 @@
-import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus } from '@nestjs/common';
-import { Response } from 'express';
-import { ResponseDto } from '../common/dtos/response.dto'; 
+import {
+  ExceptionFilter,
+  Catch,
+  ArgumentsHost,
+  HttpException,
+  HttpStatus,
+} from "@nestjs/common";
+import { HttpAdapterHost } from "@nestjs/core";
+import { writeFile } from "fs/promises";
+import { join } from "path";
+import { ResponseDto } from 'src/common/dtos/response.dto'; // Adjust the path as necessary
 
-@Catch(HttpException)
-export class HttpExceptionFilter implements ExceptionFilter {
-    catch(exception: HttpException, host: ArgumentsHost) {
-        const ctx = host.switchToHttp();
-        const response = ctx.getResponse<Response>();
-        const status = exception.getStatus();
-        const exceptionResponse = exception.getResponse();
-        const message = typeof exceptionResponse === 'string' ? exceptionResponse : (exceptionResponse as any).message;
+@Catch()
+export class AllExceptionsFilter implements ExceptionFilter {
+  constructor(private httpAdapterHost: HttpAdapterHost) {}
 
-        const responseDto: ResponseDto = {
-            message,
-            status,
-            error: true,
-            data: null,
-        };
+  catch(exception: unknown, host: ArgumentsHost) {
+    const ctx = host.switchToHttp();
+    let status = HttpStatus.INTERNAL_SERVER_ERROR;
+    let msg = "Internal Server Error";
 
-        response
-            .status(status)
-            .json(responseDto);
+    if (exception instanceof HttpException) {
+      status = exception.getStatus();
+      msg = exception.message;
     }
+
+    const { httpAdapter } = this.httpAdapterHost;
+
+    const responseDto: ResponseDto = {
+      message: msg,
+      status: status,
+      error: true, 
+      data: null,
+    };
+const timestamp =new Date().toISOString();
+    this.writeHttpLog(responseDto, );
+
+    httpAdapter.reply(ctx.getResponse(), {responseDto, timestamp}, status);
+  }
+
+  private async writeHttpLog(data: Record<string, any>) {
+    const LOGS_DIR = join(__dirname, `${Date.now()}-log.json`);
+
+    try {
+      await writeFile(LOGS_DIR, JSON.stringify(data));
+    } catch (err) {
+      return;
+    }
+  }
 }

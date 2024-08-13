@@ -5,6 +5,8 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule} from '@nestjs/typeorm'
 import { CommonModule } from './common/common.module';
 import { UserEntity } from './entity/user.entities';
+import { APP_FILTER } from "@nestjs/core";
+import { AllExceptionsFilter } from "src/exceptionFilter/http-exception.filter";
 
 
 @Module({
@@ -25,6 +27,6 @@ import { UserEntity } from './entity/user.entities';
     CommonModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [ { provide: APP_FILTER, useClass: AllExceptionsFilter },],
 })
 export class AppModule {}
