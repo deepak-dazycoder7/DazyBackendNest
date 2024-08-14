@@ -6,8 +6,8 @@ import { TypeOrmModule} from '@nestjs/typeorm'
 import { CommonModule } from './common/common.module';
 import { UserEntity } from './entity/user.entities';
 import { APP_FILTER, APP_GUARD } from "@nestjs/core";
-import { AllExceptionsFilter } from "src/exceptionFilter/http-exception.filter";
-import { JwtAuthGuard } from './guards/jwt.auth.guard';
+import { HttpExceptionFilter } from "src/exceptionFilter/http-exception.filter";
+import { JwtAuthGuard } from 'src/guards/jwt.auth.guard';
 
 
 @Module({
@@ -32,8 +32,8 @@ import { JwtAuthGuard } from './guards/jwt.auth.guard';
   ],
   controllers: [],
   providers: [
-     { provide: APP_FILTER, useClass: AllExceptionsFilter },
-     { provide: APP_GUARD, useClass: JwtAuthGuard },
+     { provide: APP_FILTER, useClass: HttpExceptionFilter },
+    { provide: APP_GUARD, useClass: JwtAuthGuard },
     ],
 })
 export class AppModule {}

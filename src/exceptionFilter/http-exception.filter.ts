@@ -1,50 +1,37 @@
-import {
-  ExceptionFilter,
-  Catch,
-  ArgumentsHost,
-  HttpException,
-  HttpStatus,
-} from "@nestjs/common";
-import { HttpAdapterHost } from "@nestjs/core";
-import { writeFile } from "fs/promises";
-import { join } from "path";
-import { ResponseDto } from 'src/common/dtos/response.dto'; // Adjust the path as necessary
+import { ExceptionFilter, Catch, ArgumentsHost, HttpException, Inject, BadRequestException } from '@nestjs/common';
+import { Request, Response } from 'express';
 
-@Catch()
-export class AllExceptionsFilter implements ExceptionFilter {
-  constructor(private httpAdapterHost: HttpAdapterHost) {}
+@Catch(HttpException)
+export class HttpExceptionFilter implements ExceptionFilter {
 
-  catch(exception: unknown, host: ArgumentsHost) {
+  constructor(
+    @Inject('CREATE_RESPONSE') private readonly returnResponseFunction
+  ) {}
+
+  catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
-    let status = HttpStatus.INTERNAL_SERVER_ERROR;
-    let msg = "Internal Server Error";
+    const response = ctx.getResponse<Response>();
+    const request = ctx.getRequest<Request>();
+    const status = exception.getStatus();
 
-    if (exception instanceof HttpException) {
-      status = exception.getStatus();
-      msg = exception.message;
+    let responseMessage: string | any = exception.message;
+    let errorResponse = null;
+
+    if (exception instanceof BadRequestException) {
+      // Directly use the object with validation errors and messages
+      errorResponse = exception.getResponse();
+      responseMessage = 'Validation failed';
     }
 
-    const { httpAdapter } = this.httpAdapterHost;
+    // Generate the response using returnResponse function
+    const responseDto = this.returnResponseFunction(
+      responseMessage,
+      status,
+      errorResponse
+    );
 
-    const responseDto: ResponseDto = {
-      message: msg,
-      status: status,
-      error: true, 
-      data: null,
-    };
-const timestamp =new Date().toISOString();
-    this.writeHttpLog(responseDto, );
-
-    httpAdapter.reply(ctx.getResponse(), {responseDto, timestamp}, status);
-  }
-
-  private async writeHttpLog(data: Record<string, any>) {
-    const LOGS_DIR = join(__dirname, `${Date.now()}-log.json`);
-
-    try {
-      await writeFile(LOGS_DIR, JSON.stringify(data));
-    } catch (err) {
-      return;
-    }
+    response
+      .status(status)
+      .json(responseDto);
   }
 }

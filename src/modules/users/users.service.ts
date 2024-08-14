@@ -4,7 +4,7 @@ import { CreateUserDto } from './dtos/create.user.dto';
 import * as bcrypt from 'bcrypt';
 import { UserEntity } from 'src/entity/user.entities';
 import { UserRepository } from 'src/entity/user.repository';
-import { UpdateUserDto } from './dtos/update.user.dto';
+import { UpdateUserProfileDto } from './dtos/update.user.dto';
 
 
 @Injectable()
@@ -12,57 +12,62 @@ export class UsersService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: UserRepository,
-  ) {}
+  ) { }
 
 
   findAll(): Promise<UserEntity[]> {
     return this.userRepository.find();
   }
-  
+
   findByID(id: number): Promise<UserEntity> {
-    return this.userRepository.findOne({where : {id}});
+    return this.userRepository.findOne({ where: { id } });
   }
-  
+
   findOneByEmail(email: string): Promise<UserEntity | undefined> {
     return this.userRepository.findOne({ where: { email } });
   }
 
   //create user
   async createUser(createUserDto: CreateUserDto) {
-      const newUser = this.userRepository.create(createUserDto);
-      newUser.password = await bcrypt.hash(createUserDto.password, 10);
-      const savedUser = await this.userRepository.save(newUser);
+    const newUser = this.userRepository.create(createUserDto);
+    newUser.password = await bcrypt.hash(createUserDto.password, 10);
+    const savedUser = await this.userRepository.save(newUser);
 
-      return savedUser;
+    return savedUser;
   }
 
   //update user
-  async updateProfile(userId: number, updateProfileDto: UpdateUserDto): Promise<UserEntity> {
+  async updateUserProfile(userId: number, updateUserProfileDto: UpdateUserProfileDto): Promise<UserEntity> {
     const user = await this.userRepository.findOne({
-      where: { id: userId },
+      where: { id: userId }
     });
     if (!user) {
       throw new NotFoundException('User not found');
     }
 
-    if (updateProfileDto.password) {
-      updateProfileDto.password = await bcrypt.hash(updateProfileDto.password, 10);
+    const { firstName, lastName, email, avtar, password } = updateUserProfileDto;
+
+    if (firstName) user.firstName = firstName;
+    if (lastName) user.lastName = lastName;
+    if (email) user.email = email;
+    if (avtar) user.avtar = avtar;
+    if (password) {
+      const salt = await bcrypt.genSalt();
+      user.password = await bcrypt.hash(password, salt);
     }
 
-    Object.assign(user, updateProfileDto);
+    await this.userRepository.save(user);
+    return user;
+  }
 
-    return this.userRepository.save(user);
+  //remove user
+  async removeUser(id : number) : Promise<UserEntity> {
+    const user = await this.userRepository.findOne({ where : {id} });
+    if(!user) {
+      throw new NotFoundException(' user not found')
+    }
+    await this.userRepository.delete(id);
+    return user;
   }
 }
-    
-  //delete user by Id
-//   async remove(id: number): Promise<UserEntity> {
-//     const deleteruslt = await this.userRepository.delete(id);
 
-//     if (deleteruslt.affected === 1) {
-//       return 'User is deleted successfully';
-//     } else {
-//       throw new Error('User Is not found or could not be deleted');
-//     }
-//   }
-// }
