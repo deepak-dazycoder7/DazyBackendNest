@@ -1,13 +1,17 @@
-import { Body, Controller, Post, Inject, UnauthorizedException, Put, Param, Delete } from '@nestjs/common';
+import { Body, Controller, Post, Inject, UnauthorizedException, Put, Get, Param, Delete, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dtos/create.user.dto';
 import { UserEntity } from 'src/entity/user.entities';
 import { UpdateUserProfileDto } from './dtos/update.user.dto';
 import { Public } from 'src/decorators/publice.decorator';
-
+import { Roles } from 'src/decorators/role.decorator';
+import { Role } from 'src/common/roles/role.enum';
+import { RolesGuard } from 'src/guards/roles.guards';
+import { JwtAuthGuard } from 'src/guards/jwt.auth.guard';
 
 
 @Controller('users')
+@UseGuards(RolesGuard)
 export class UsersController {
     constructor(
         private readonly usersService: UsersService,
@@ -16,7 +20,8 @@ export class UsersController {
 
 
     //create user
-    @Public()
+    // @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(Role.ADMIN)
     @Post('create')
     async createUser(@Body() createUserDto: CreateUserDto): Promise<UserEntity> {
         try {
@@ -36,6 +41,7 @@ export class UsersController {
     }
 
     //update user 
+    @Roles(Role.ADMIN)
     @Put('profile/:id')
     async updateUserProfile(@Param('id') userId: number, @Body() updateUserProfileDto: UpdateUserProfileDto,): Promise<string> {
         try {
@@ -48,6 +54,7 @@ export class UsersController {
     }
 
     //remove user
+    @Roles(Role.ADMIN)
     @Delete('remove/:id')
     async removeUser(@Param('id') id: number,): Promise<string> {
         try {
@@ -56,5 +63,18 @@ export class UsersController {
         } catch (error) {
             return this.returnResponse(error.message, 400, null)
         }
+    }
+
+    //get users
+    @Get()
+    @Roles(Role.ADMIN)
+    findAll() {
+      return this.usersService.findAll();
+    }
+  
+    @Get(':id')
+    @Roles(Role.ADMIN)
+    findOne(@Param('id') id: number) {
+      return this.usersService.findOne(id);
     }
 }

@@ -14,14 +14,14 @@ export class UsersService {
     private readonly userRepository: UserRepository,
   ) { }
 
-
-  findAll(): Promise<UserEntity[]> {
+  async findAll(): Promise<UserEntity[]> {
     return this.userRepository.find();
   }
 
-  findByID(id: number): Promise<UserEntity> {
-    return this.userRepository.findOne({ where: { id } });
+  async findOne(id: number): Promise<UserEntity> {
+    return this.userRepository.findOneBy({ id });
   }
+
 
   findOneByEmail(email: string): Promise<UserEntity | undefined> {
     return this.userRepository.findOne({ where: { email } });
@@ -61,9 +61,9 @@ export class UsersService {
   }
 
   //remove user
-  async removeUser(id : number) : Promise<UserEntity> {
-    const user = await this.userRepository.findOne({ where : {id} });
-    if(!user) {
+  async removeUser(id: number): Promise<UserEntity> {
+    const user = await this.userRepository.findOne({ where: { id } });
+    if (!user) {
       throw new NotFoundException(' user not found')
     }
     await this.userRepository.delete(id);

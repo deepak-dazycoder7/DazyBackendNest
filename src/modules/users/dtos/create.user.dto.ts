@@ -21,8 +21,8 @@ export class CreateUserDto {
   })
   password: string;
 
-  @IsString()
-  @IsNotEmpty()
+  @IsString({})
+  @IsNotEmpty({message : 'Define your role'})
   role: string;
 
   @IsString()

@@ -12,17 +12,11 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
       transform: true,
       exceptionFactory: (errors) => {
+        // Reduce the errors to an object containing only the fields with errors
         const formattedErrors = errors.reduce((acc, err) => {
           acc[err.property] = Object.values(err.constraints).join(', ');
           return acc;
-        }, {
-          firstName: '',
-          lastName: '',
-          email: '',
-          password: '',
-          role: '',
-          avtar: '',
-        });
+        }, {});
         return new BadRequestException(formattedErrors);
       },
     }),

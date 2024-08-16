@@ -1,4 +1,4 @@
-import { ExceptionFilter, Catch, ArgumentsHost, HttpException, Inject, BadRequestException } from '@nestjs/common';
+import { ExceptionFilter, Catch, ArgumentsHost, HttpException, Inject, BadRequestException, ForbiddenException } from '@nestjs/common';
 import { Request, Response } from 'express';
 
 @Catch(HttpException)
@@ -18,13 +18,15 @@ export class HttpExceptionFilter implements ExceptionFilter {
     let errorResponse = null;
 
     if (exception instanceof BadRequestException) {
-      // Directly use the object with validation errors and messages
+      // Extract the validation error details
       errorResponse = exception.getResponse();
       responseMessage = 'Validation failed';
+    } else if (exception instanceof ForbiddenException) {
+      responseMessage = 'Access denied: ' + exception.message;
     }
 
     // Generate the response using returnResponse function
-    const responseDto = this.returnResponseFunction(
+    const returnResponse = this.returnResponseFunction(
       responseMessage,
       status,
       errorResponse
@@ -32,6 +34,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
     response
       .status(status)
-      .json(responseDto);
+      .json(returnResponse);
+      
   }
 }
