@@ -5,7 +5,7 @@ import { Request, Response } from 'express';
 export class HttpExceptionFilter implements ExceptionFilter {
 
   constructor(
-    @Inject('CREATE_RESPONSE') private readonly returnResponseFunction
+    @Inject('CREATE_RESPONSE') private readonly returnResponseFunction: (message: string, status: number, error: any) => any
   ) {}
 
   catch(exception: HttpException, host: ArgumentsHost) {
@@ -17,15 +17,17 @@ export class HttpExceptionFilter implements ExceptionFilter {
     let responseMessage: string | any = exception.message;
     let errorResponse = null;
 
+    // Handling specific exceptions
     if (exception instanceof BadRequestException) {
-      // Extract the validation error details
       errorResponse = exception.getResponse();
       responseMessage = 'Validation failed';
     } else if (exception instanceof ForbiddenException) {
       responseMessage = 'Access denied: ' + exception.message;
+    } else {
+      responseMessage = 'Internal server error'; // Fallback for other HttpExceptions
     }
 
-    // Generate the response using returnResponse function
+    // Generate the response using the returnResponse function
     const returnResponse = this.returnResponseFunction(
       responseMessage,
       status,
@@ -35,6 +37,5 @@ export class HttpExceptionFilter implements ExceptionFilter {
     response
       .status(status)
       .json(returnResponse);
-      
   }
 }

@@ -1,11 +1,11 @@
-import { NotFoundException, Injectable } from '@nestjs/common';
+import { NotFoundException, Injectable, ForbiddenException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from './dtos/create.user.dto';
 import * as bcrypt from 'bcrypt';
 import { UserEntity } from 'src/entity/user.entities';
 import { UserRepository } from 'src/entity/user.repository';
 import { UpdateUserProfileDto } from './dtos/update.user.dto';
-
+import { Action } from 'src/casl/action.enum';
 
 @Injectable()
 export class UsersService {
@@ -69,5 +69,20 @@ export class UsersService {
     await this.userRepository.delete(id);
     return user;
   }
-}
+    // You can add CASL-specific checks here if needed
+    async canReadAll(ability) {
+      if (!ability.can(Action.Read, UserEntity)) {
+        throw new ForbiddenException('user not read');
+      }
+      return this.findAll();
+    }
+  
+    async canReadOne(id: number, ability) {
+      const user = await this.findOne(id);
+      if (!ability.can(Action.Read, user)) {
+        throw new ForbiddenException('user not read');
+      }
+      return user;
+    }
+  }
 
