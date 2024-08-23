@@ -1,40 +1,14 @@
-import { AppAbility } from 'src/casl/casl-ability.factory';
-import { Action } from 'src/casl/action.enum';
-import { UserEntity } from 'src/entity/user.entities';
-import { PolicyHandler } from 'src/casl/policy.interface';
+import { AppAbility } from './casl-ability.factory';
+import { PolicyHandler } from './policy.interface';
 
-// Policy to create a user
-export class CreateUserPolicy implements PolicyHandler {
+export class CreatePolicyHandler implements PolicyHandler {
   handle(ability: AppAbility): boolean {
-    return ability.can(Action.Create, UserEntity);
+    return ability.can('create', 'all');
   }
 }
 
-
-// Policy to update a user
-export class UpdateUserPolicy implements PolicyHandler {
+export class DeletePolicyHandler implements PolicyHandler {
   handle(ability: AppAbility): boolean {
-    return ability.can(Action.Update, UserEntity);
-  }
-}
-
-// Policy to delete a user
-export class DeleteUserPolicy implements PolicyHandler {
-  handle(ability: AppAbility): boolean {
-    return ability.can(Action.Delete, UserEntity);
-  }
-}
-
-// Policy to read a user
-export class ReadUserPolicy implements PolicyHandler {
-  handle(ability: AppAbility): boolean {
-    return ability.can(Action.Read, UserEntity);
-  }
-}
-
-// Policy to read all users
-export class ReadAllUsersPolicy implements PolicyHandler {
-  handle(ability: AppAbility): boolean {
-    return ability.can(Action.Read, UserEntity);
+    return ability.can('delete', 'all');
   }
 }

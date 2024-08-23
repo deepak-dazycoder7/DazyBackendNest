@@ -2,7 +2,7 @@ import { NotFoundException, Injectable, ForbiddenException } from '@nestjs/commo
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from './dtos/create.user.dto';
 import * as bcrypt from 'bcrypt';
-import { UserEntity } from 'src/entity/user.entities';
+import { UserEntity } from 'src/entity/user.entity';
 import { UserRepository } from 'src/entity/user.repository';
 import { UpdateUserProfileDto } from './dtos/update.user.dto';
 import { Action } from 'src/casl/action.enum';
