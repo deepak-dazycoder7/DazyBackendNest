@@ -12,7 +12,9 @@ import { LoggerMiddleware } from './middlewares/app.middleware';
 import { UserSeeder } from './modules/adminSeed/admin.seed';
 import { JwtStrategy } from './jwtstrategy/jwt.strategy';
 import { CaslAbilityFactory } from './casl/casl-ability.factory';
-import { PoliciesGuard } from './casl/policy.guard';
+import { PoliciesGuard } from './guards/permission.guard';
+import { ProductEntity } from './entity/product.entity';
+import { ProductModule } from './modules/products/products.module';
 
 @Module({
   imports: [
@@ -26,18 +28,19 @@ import { PoliciesGuard } from './casl/policy.guard';
       username: process.env.DATABASE_USER || 'root',
       password: process.env.DATABASE_PASSWORD || '',
       database: process.env.DATABASE_NAME || 'dazynestdb',
-      entities: [UserEntity],
+      entities: [UserEntity, ProductEntity],
       synchronize: true,
     }),
     AuthModule,
     UsersModule,
     CommonModule,
+    ProductModule
   ],
   controllers: [],
   providers: [
     CaslAbilityFactory,
-    { provide: APP_GUARD, useClass: JwtAuthGuard },
-    { provide: APP_GUARD, useClass: PoliciesGuard },
+   // { provide: APP_GUARD, useClass: JwtAuthGuard },
+    //{ provide: APP_GUARD, useClass: PoliciesGuard },
     { provide: APP_FILTER, useClass: HttpExceptionFilter },
     UserSeeder,
     JwtStrategy,

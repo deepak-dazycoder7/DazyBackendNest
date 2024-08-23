@@ -3,9 +3,8 @@ import { UsersController } from "./users.controller";
 import { UsersService } from "./users.service";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { UserEntity } from "src/entity/user.entity";
-import { UserRepository } from "src/entity/user.repository";
+import { UserRepository } from "src/repositories/user.repository";
 import { CaslAbilityFactory } from "src/casl/casl-ability.factory";
-import { JwtAuthGuard } from "src/guards/jwt.auth.guard";
 @Module({
     imports: [TypeOrmModule.forFeature([UserEntity])],
     controllers: [UsersController],

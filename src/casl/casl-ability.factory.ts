@@ -5,10 +5,9 @@ import {
   ExtractSubjectType,
   InferSubjects,
   PureAbility,
-  ConditionsMatcher,
 } from '@casl/ability';
 import { UserEntity } from 'src/entity/user.entity';
-import { Role } from 'src/common/roles/role.enum';
+import { Role } from 'src/enums/role.enum';
 
 type Subjects = InferSubjects<typeof UserEntity> | 'all';
 export type AppAbility = PureAbility<[string, Subjects]>;

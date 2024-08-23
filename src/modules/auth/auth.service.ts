@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { SignInDto } from './dtos/auth.signIn.dto';
+import { SignInDto } from '../../dtos/auth.signIn.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from 'src/entity/user.entity';
