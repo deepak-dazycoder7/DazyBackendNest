@@ -26,20 +26,18 @@ export class PoliciesGuard implements CanActivate {
     ) || [];
 
     const { user } = context.switchToHttp().getRequest();
-    console.log('User:', user);
 
     if (!user) {
       throw new ForbiddenException('Route not found');
     }
 
     const ability = this.abilityFactory.createForUser(user);
-    console.log('Ability:', ability);
+   // console.log('Ability:', ability);
 
   
     const hasAccess = policyHandlers.every((handler) =>
       handler.handle(ability),
     );
-    console.log('Policy Handlers:', policyHandlers);
 
     if (!hasAccess) {
       throw new ForbiddenException('Only Admin Access');

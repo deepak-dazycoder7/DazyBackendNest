@@ -12,41 +12,24 @@ export class UsersService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: UserRepository,
-  ) { }
-
-  async findAll(): Promise<UserEntity[]> {
-    return this.userRepository.find();
-  }
-
-  async findOne(id: number): Promise<UserEntity> {
-    return this.userRepository.findOneBy({ id });
-  }
-
-
-  findOneByEmail(email: string): Promise<UserEntity | undefined> {
-    return this.userRepository.findOne({ where: { email } });
-  }
+  ) {}
 
   //create user
   async createUser(createUserDto: CreateUserDto) {
     const newUser = this.userRepository.create(createUserDto);
     newUser.password = await bcrypt.hash(createUserDto.password, 10);
     const savedUser = await this.userRepository.save(newUser);
-
     return savedUser;
   }
 
   //update user
-  async updateUserProfile(userId: number, updateUserProfileDto: UpdateUserProfileDto): Promise<UserEntity> {
-    const user = await this.userRepository.findOne({
-      where: { id: userId }
-    });
+  async updateUserProfile(id: number, updateUserProfileDto: UpdateUserProfileDto): Promise<UserEntity> {
+    const user = await this.userRepository.findOne({ where: { id }});
     if (!user) {
       throw new NotFoundException('User not found');
     }
 
     const { firstName, lastName, email, avtar, password } = updateUserProfileDto;
-
     if (firstName) user.firstName = firstName;
     if (lastName) user.lastName = lastName;
     if (email) user.email = email;
@@ -55,7 +38,6 @@ export class UsersService {
       const salt = await bcrypt.genSalt();
       user.password = await bcrypt.hash(password, salt);
     }
-
     await this.userRepository.save(user);
     return user;
   }
@@ -64,25 +46,31 @@ export class UsersService {
   async removeUser(id: number): Promise<UserEntity> {
     const user = await this.userRepository.findOne({ where: { id } });
     if (!user) {
-      throw new NotFoundException(' user not found')
+      throw new NotFoundException(`User With Id ${id} Not Found`)
     }
     await this.userRepository.delete(id);
     return user;
   }
-    // You can add CASL-specific checks here if needed
-    async canReadAll(ability) {
-      if (!ability.can(Action.Read, UserEntity)) {
-        throw new ForbiddenException('user not read');
-      }
-      return this.findAll();
+
+  //read user
+  async getOne(id: number) :Promise<UserEntity> {
+    const user = await this.userRepository.findOne({ where: { id }});
+    if(!user) {
+      throw new NotFoundException(`User with id ${id} Not Found`)
     }
-  
-    async canReadOne(id: number, ability) {
-      const user = await this.findOne(id);
-      if (!ability.can(Action.Read, user)) {
-        throw new ForbiddenException('user not read');
-      }
-      return user;
-    }
+    return user;
   }
+
+  async getAll() : Promise<UserEntity[]> {
+    const users = await this.userRepository.find();
+    if (!users || users.length === 0) {
+      throw new NotFoundException('No users found');
+    }
+    return users;
+  }
+
+  async findOneByEmail(email : string) : Promise<UserEntity> {
+     return await this.userRepository.findOne({ where : { email }});
+  }
+}
 

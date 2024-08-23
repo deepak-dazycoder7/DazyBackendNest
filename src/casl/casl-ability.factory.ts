@@ -5,6 +5,7 @@ import {
   ExtractSubjectType,
   InferSubjects,
   PureAbility,
+  ConditionsMatcher,
 } from '@casl/ability';
 import { UserEntity } from 'src/entity/user.entity';
 import { Role } from 'src/common/roles/role.enum';
@@ -22,14 +23,19 @@ export class CaslAbilityFactory {
     if (user.role === Role.Admin) {
       can('manage', 'all'); // Admin has full access
     } else if (user.role === Role.Support) {
-      can('read', UserEntity); // Support can only read users
+      can('read', UserEntity);
+      can('update', UserEntity);
+      cannot('create', UserEntity);
+      cannot('delete', UserEntity);
     } else if (user.role === Role.Manager) {
       can('manage', UserEntity);
-      can('update', UserEntity),
+      can('read', UserEntity);
+      can('update', UserEntity);
+      cannot('create', UserEntity); // Manager can manage but cannot create users
       cannot('delete', UserEntity); // Manager can manage but cannot delete users
     } else if (user.role === Role.Accountant) {
       can('read', UserEntity);
-      can('update', UserEntity, { status: true }); // Accountant can update status only
+      can('update', UserEntity, { status: 1 }); // Accountant can update status only if it is 1
     } else {
       cannot('manage', 'all'); // Default no access
     }

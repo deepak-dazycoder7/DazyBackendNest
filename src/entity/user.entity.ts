@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('user')
@@ -15,6 +16,7 @@ export class UserEntity  {
   email: string;
 
   @Column()
+  @Exclude() // This will exclude the password field from the response
   password: string;
 
   @Column()
