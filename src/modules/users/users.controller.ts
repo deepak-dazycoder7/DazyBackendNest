@@ -1,4 +1,4 @@
-import {Body, Controller, Post, Put, Param, Delete, Inject, Get } from '@nestjs/common';
+import {Body, Controller, Post, Put, Param, Delete, Inject, Get, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from '../../dtos/create.user.dto';
 import { UpdateUserProfileDto } from '../../dtos/update.user.dto';
@@ -6,8 +6,11 @@ import { UserEntity } from 'src/entity/user.entity';
 import { SetMetadata } from '@nestjs/common';
 import { CHECK_POLICIES_KEY } from 'src/decorators/policies.decorator';
 import { CreatePolicyHandler, DeletePolicyHandler, ReadPolicyHandler, UpdatePolicyHandler } from 'src/casl/user.policy';
+import { UserRoleGuard } from 'src/guards/role-permission.guard';
+import { JwtAuthGuard } from 'src/guards/jwt.auth.guard';
 
 @Controller('users')
+@UseGuards(UserRoleGuard, JwtAuthGuard)
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
@@ -17,13 +20,13 @@ export class UsersController {
   //create user
   @Post('create')
   @SetMetadata(CHECK_POLICIES_KEY, [new CreatePolicyHandler()])
-  async createUser(@Body() createUserDto: CreateUserDto): Promise<UserEntity> {
+  async createUser(@Body() createUserDto: CreateUserDto): Promise<string> {
     try {
       const user = await this.usersService.createUser(createUserDto);
       const { password, ...userCreate } = user;
       return this.returnResponse('User Created Successfully', 200, userCreate);
     } catch (error) {
-      return this.returnResponse(error.message, 401, null);
+      return this.returnResponse(error.message, 400, null);
     }
   }
 
@@ -36,7 +39,7 @@ export class UsersController {
       const { password, ...userUpdate } = user
       return this.returnResponse('Profile Updated Successfully', 200, userUpdate);
     } catch (error) {
-      return this.returnResponse(error.message, 403, null);
+      return this.returnResponse(error.message, 400, null);
     }
   }
 
@@ -48,7 +51,7 @@ export class UsersController {
       await this.usersService.removeUser(id);
       return this.returnResponse(`User Id ${id} Has Been Deleted`, 200, null);
     } catch (error) {
-      return this.returnResponse(error.message, 403, null);
+      return this.returnResponse(error.message, 400, null);
     }
   }
 
@@ -61,7 +64,7 @@ export class UsersController {
       const { password, ...getUser} = user;
       return this.returnResponse(`User Id ${id} Fetched Successfully`, 200, getUser)
     } catch (error) {
-      return this.returnResponse(error.message, 403, null)
+      return this.returnResponse(error.message, 400, null)
     }
   }
 
@@ -73,7 +76,7 @@ export class UsersController {
       const getUsers = users.map(({password, ...user}) => user)
       return this.returnResponse('All Users Fetched Successfully', 200, getUsers);
     } catch (error) {
-      return this.returnResponse(error.message, 403, null)
+      return this.returnResponse(error.message, 400, null)
     }
   }
 }

@@ -11,8 +11,7 @@ import { JwtAuthGuard } from 'src/guards/jwt.auth.guard';
 import { LoggerMiddleware } from './middlewares/app.middleware';
 import { UserSeeder } from './modules/adminSeed/admin.seed';
 import { JwtStrategy } from './jwtstrategy/jwt.strategy';
-import { CaslAbilityFactory } from './casl/casl-ability.factory';
-import { PoliciesGuard } from './guards/permission.guard';
+import { UserAbilityFactory } from './casl/user-ability.factory';
 import { ProductEntity } from './entity/product.entity';
 import { ProductModule } from './modules/products/products.module';
 
@@ -38,9 +37,8 @@ import { ProductModule } from './modules/products/products.module';
   ],
   controllers: [],
   providers: [
-    CaslAbilityFactory,
-   // { provide: APP_GUARD, useClass: JwtAuthGuard },
-    //{ provide: APP_GUARD, useClass: PoliciesGuard },
+    UserAbilityFactory,
+    { provide: APP_GUARD, useClass: JwtAuthGuard },
     { provide: APP_FILTER, useClass: HttpExceptionFilter },
     UserSeeder,
     JwtStrategy,
@@ -51,7 +49,7 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(LoggerMiddleware).forRoutes('*');
   }
-  constructor(private readonly userSeeder: UserSeeder) {}
+  constructor(private readonly userSeeder: UserSeeder) { }
   async onModuleInit() {
     await this.userSeeder.onModuleInit();
   }

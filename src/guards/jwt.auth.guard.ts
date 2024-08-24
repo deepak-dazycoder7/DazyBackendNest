@@ -1,11 +1,6 @@
-import {
-  CanActivate,
-  Injectable,
-  ExecutionContext,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { CanActivate, Injectable, ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { IS_PUBLIC_KEY } from 'src/decorators/publice.decorator';
+import { IS_PUBLIC_KEY } from 'src/decorators/publice.decorator'; 
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { ConfigService } from '@nestjs/config';
@@ -24,7 +19,6 @@ export class JwtAuthGuard implements CanActivate {
       context.getClass(),
     ]);
 
-    // If route is public, bypass the guard
     if (isPublic) {
       return true;
     }
@@ -32,26 +26,17 @@ export class JwtAuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest<Request>();
     const token = this.extractTokenFromHeader(request);
 
-    // No token found
     if (!token) {
       throw new UnauthorizedException('No token found');
     }
 
     try {
-      // Verify the token
       const payload = await this.jwtService.verifyAsync(token, {
         secret: this.configService.get<string>('JWT_SECRET'),
       });
-
-      // Attach the user to the request object
-      request.user = payload;
+      request.user = payload; // Attach user payload to request
     } catch (error) {
-      // Handle different types of JWT verification errors
-      if (error.name === 'TokenExpiredError') {
-        throw new UnauthorizedException('Token has expired');
-      } else {
-        throw new UnauthorizedException('Invalid token');
-      }
+      this.handleJwtError(error);
     }
 
     return true;
@@ -63,5 +48,18 @@ export class JwtAuthGuard implements CanActivate {
 
     const [type, token] = authHeader.split(' ');
     return type === 'Bearer' ? token : undefined;
+  }
+
+  private handleJwtError(error: any): void {
+    if (error.name === 'TokenExpiredError') {
+      throw new UnauthorizedException('Token has expired');
+    } 
+    if (error.name === 'JsonWebTokenError') {
+      throw new UnauthorizedException('Invalid token');
+    }
+    
+    // Log unexpected errors for debugging
+    console.error('Unexpected JWT error:', error);
+    throw new UnauthorizedException('Unauthorized');
   }
 }

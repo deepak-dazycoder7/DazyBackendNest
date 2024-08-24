@@ -1,15 +1,15 @@
 import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { CaslAbilityFactory } from '../casl/casl-ability.factory';
+import { UserAbilityFactory } from '../casl/user-ability.factory';
 import { CHECK_POLICIES_KEY } from '../decorators/policies.decorator';
-import { PolicyHandler } from '../casl/policy.interface';
+import { UserPolicyHandler } from '../casl/policy.interface';
 import { IS_PUBLIC_KEY } from 'src/decorators/publice.decorator';
 
 @Injectable()
-export class PoliciesGuard implements CanActivate {
+export class UserRoleGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
-    private abilityFactory: CaslAbilityFactory,
+    private abilityFactory: UserAbilityFactory,
   ) {}
 
   canActivate(context: ExecutionContext): boolean {
@@ -18,11 +18,11 @@ export class PoliciesGuard implements CanActivate {
       return true;
     }
 
-    const policyHandlers = this.reflector.get<PolicyHandler[]>(CHECK_POLICIES_KEY, context.getHandler()) || [];
+    const policyHandlers = this.reflector.get<UserPolicyHandler[]>(CHECK_POLICIES_KEY, context.getHandler()) || [];
     const { user } = context.switchToHttp().getRequest();
 
-    if (!user) {
-      throw new ForbiddenException('Route not found');
+    if (!user || !user.role) {
+      throw new ForbiddenException('User role not found');
     }
 
     const ability = this.abilityFactory.createForUser(user);

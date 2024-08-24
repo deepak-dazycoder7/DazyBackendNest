@@ -30,19 +30,9 @@ export class UsersService {
     const user = await this.userRepository.findOne({ where: { id }});
     if (!user) {
       throw new NotFoundException('User not found');
-    }
-
-    const { firstName, lastName, email, avtar, password } = updateUserProfileDto;
-    if (firstName) user.firstName = firstName;
-    if (lastName) user.lastName = lastName;
-    if (email) user.email = email;
-    if (avtar) user.avtar = avtar;
-    if (password) {
-      const salt = await bcrypt.genSalt();
-      user.password = await bcrypt.hash(password, salt);
-    }
-    await this.userRepository.save(user);
-    return user;
+    } 
+    Object.assign(user, updateUserProfileDto);
+    return await this.userRepository.save(user);
   }
 
   //remove user
