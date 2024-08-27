@@ -33,7 +33,7 @@ import { ProductModule } from './modules/products/products.module';
     AuthModule,
     UsersModule,
     CommonModule,
-    ProductModule
+    ProductModule,
   ],
   controllers: [],
   providers: [

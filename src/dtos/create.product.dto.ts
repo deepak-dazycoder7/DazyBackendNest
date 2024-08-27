@@ -30,10 +30,6 @@ export class CreateProductDto {
   @IsOptional()
   amenities?: string[];
 
-  @IsUrl()
-  @IsOptional()
-  imageUrl?: string;
-
   @IsOptional()
   @IsDate()
   @Type(() => Date)  // Ensure this is here to convert string to Date

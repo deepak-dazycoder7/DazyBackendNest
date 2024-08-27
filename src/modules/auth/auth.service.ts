@@ -6,13 +6,16 @@ import { UserEntity } from 'src/entity/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 
+
+
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(UserEntity)
     private userRepository: Repository<UserEntity>,
-    private jwtService: JwtService
-  ) {}
+    private jwtService: JwtService,
+  //  private readonly blacklistedTokens: Set<string> = new Set()
+  ) { }
 
   // SignIn validation
   async SignIn(signinDto: SignInDto): Promise<UserEntity> {
@@ -28,12 +31,24 @@ export class AuthService {
     return user;
   }
 
-//TOKEN generate
+  //Sign Out
+  // async signOut(token: string): Promise<void> {
+  //   if (token) {
+  //     this.blacklistedTokens.add(token);
+  //   } else {
+  //     throw new Error('Token not found');
+  //   }
+  // }
+  // isTokenBlacklisted(token: string): boolean {
+  //   return this.blacklistedTokens.has(token);
+  // }
+
+  //TOKEN generate
   async generateToken(user: UserEntity): Promise<string> {
     const payload = {
       email: user.email,
       sub: user.id,
-      role: user.role, 
+      role: user.role,
     };
     return this.jwtService.sign(payload);
   }

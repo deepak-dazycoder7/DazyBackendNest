@@ -1,9 +1,13 @@
-import { NotFoundException, Injectable, ConflictException } from '@nestjs/common';
+import { NotFoundException, Injectable, ConflictException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateProductDto } from 'src/dtos/create.product.dto';
 import { ProductEntity } from 'src/entity/product.entity';
 import { ProductRepository } from 'src/repositories/product.repository';
 import { UpdateProductDto } from 'src/dtos/update.product.dto';
+import { UploadFileDto } from 'src/dtos/upload.file.dto';
+import { promises as fs } from 'fs';
+import { join } from 'path';
+
 
 @Injectable()
 export class ProductService {
@@ -34,7 +38,6 @@ export class ProductService {
             throw new NotFoundException('Product not found');
         }
 
-        // Safely update properties
         Object.assign(product, updateProductDto);
         return this.productRepository.save(product);
     }
@@ -63,4 +66,45 @@ export class ProductService {
     async getAllProducts(): Promise<ProductEntity[]> {
         return this.productRepository.find();
     }
-}
+
+    //uploade files
+    async uploadFiles(id: number, uploadFileDto: UploadFileDto, files: { images?: Express.Multer.File[], videos?: Express.Multer.File[] }): Promise<ProductEntity> {
+        const product = await this.productRepository.findOne({ where: { id } });
+        if (!product) {
+            throw new NotFoundException('Product not found');
+        }
+    
+        // Save image files (already saved to disk)
+        const savedImages = [];
+        if (files.images) {
+            for (const file of files.images) {
+                const filePath = file.path; // Get the file path
+                savedImages.push(filePath); // Use the file path
+            }
+        }
+    
+        // Save video files (already saved to disk)
+        const savedVideos = [];
+        if (files.videos) {
+            for (const file of files.videos) {
+                const filePath = file.path; // Get the file path
+                savedVideos.push(filePath); // Use the file path
+            }
+        }
+    
+        // Update product with file paths
+        product.images = [...(product.images || []), ...savedImages];
+        product.videos = [...(product.videos || []), ...savedVideos];
+    
+        // Update product details if provided
+        if (uploadFileDto.name) {
+            product.name = uploadFileDto.name;
+        }
+        if (uploadFileDto.description) {
+            product.description = uploadFileDto.description;
+        }
+    
+        // Save the updated product entity
+        return this.productRepository.save(product);
+    }
+}   

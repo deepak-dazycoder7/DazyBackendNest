@@ -26,3 +26,9 @@ export class ReadProductHandler implements ProductPolicyHandler {
     return ability.can(Action.Read, ProductEntity); // Use Action.Read instead of 'read'
   }
 }
+
+export class UploadFileHandler implements ProductPolicyHandler {
+  handle(ability: AppAbility): boolean {
+    return ability.can(Action.Upload, ProductEntity); // Check if the user can upload files
+  }
+}

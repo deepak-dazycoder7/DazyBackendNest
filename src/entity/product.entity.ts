@@ -26,9 +26,6 @@ export class ProductEntity {
   @Column({ type: 'simple-array', nullable: true })
   amenities: string[];
 
-  @Column({ nullable: true })
-  imageUrl: string;
-
   @Column({ type: 'date', nullable: true })
   availableFrom: Date;
 
@@ -50,4 +47,11 @@ export class ProductEntity {
 
   @Column({ length: 100 })
   country: string;
+
+  // New fields for file paths
+  @Column('simple-array', { nullable: true })
+  images: string[];
+
+  @Column('simple-array', { nullable: true })
+  videos: string[];
 }
