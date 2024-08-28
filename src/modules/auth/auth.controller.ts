@@ -1,7 +1,7 @@
 import { Body, Controller, Post, UnauthorizedException, Inject, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { SignInDto } from '../../dtos/auth.signIn.dto';
-import { Public } from 'src/decorators/publice.decorator';
+import { SignInDto } from './dto/auth.signIn.dto';
+import { Public } from 'src/modules/common/decorators/publice.decorator';
 import { Request } from 'express';
 
 @Controller('auth')

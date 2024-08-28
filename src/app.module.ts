@@ -1,19 +1,19 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AuthModule } from 'src/modules/auth/auth.module';
-import { UsersModule } from 'src/modules/users/users.module';
+import { UsersModule } from 'src/domain/users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CommonModule } from './common/common.module';
-import { UserEntity } from './entity/user.entity';
+import { CommonModule } from './modules/common/common.module';
+import { UserEntity } from './domain/users/entity/user.entity';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
-import { HttpExceptionFilter } from 'src/exceptionFilter/http-exception.filter';
-import { JwtAuthGuard } from 'src/guards/jwt.auth.guard';
-import { LoggerMiddleware } from './middlewares/app.middleware';
-import { UserSeeder } from './modules/adminSeed/admin.seed';
-import { JwtStrategy } from './jwtstrategy/jwt.strategy';
-import { UserAbilityFactory } from './casl/user-ability.factory';
-import { ProductEntity } from './entity/product.entity';
-import { ProductModule } from './modules/products/products.module';
+import { HttpExceptionFilter } from 'src/modules/common/exceptionFilter/http-exception.filter';
+import { JwtAuthGuard } from 'src/modules/common/guards/jwt.auth.guard';
+import { LoggerMiddleware } from './modules/common/middlewares/app.middleware';
+import { UserSeeder } from './domain/adminSeed/admin.seed';
+import { JwtStrategy } from './modules/common/jwtstrategy/jwt.strategy';
+import { UserAbilityFactory } from './domain/users/permission-abilities/user-ability.factory';
+import { ProductEntity } from './domain/products/entity/product.entity';
+import { ProductModule } from './domain/products/products.module';
 
 @Module({
   imports: [
