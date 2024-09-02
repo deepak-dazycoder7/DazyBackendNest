@@ -1,0 +1,4 @@
+{
+    "isNotEmpty": "The field must not be empty",
+    "isEmail": "The field must be a valid email address"
+}

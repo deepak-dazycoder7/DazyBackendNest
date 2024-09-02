@@ -1,13 +1,13 @@
-import {Body, Controller, Post, Put, Param, Delete, Inject, Get, UseGuards } from '@nestjs/common';
+import {Body, Controller, Post, Put, Param, Delete, Inject, Get, UseGuards, UseFilters } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dtos/create.user.dto';
 import { UpdateUserProfileDto } from './dtos/update.user.dto';
-import { UserEntity } from 'src/domain/users/entity/user.entity';
 import { SetMetadata } from '@nestjs/common';
 import { CHECK_POLICIES_KEY } from 'src/modules/common/decorators/policies.decorator';
 import { CreatePolicyHandler, DeletePolicyHandler, ReadPolicyHandler, UpdatePolicyHandler } from 'src/domain/users/permission-abilities/user.policy';
 import { UserRoleGuard } from './guards/role-permission.guard';
 import { JwtAuthGuard } from 'src/modules/common/guards/jwt.auth.guard';
+import { I18nValidationExceptionFilter } from 'nestjs-i18n';
 
 @Controller('users')
 @UseGuards(UserRoleGuard, JwtAuthGuard)
@@ -19,6 +19,7 @@ export class UsersController {
 
   //create user
   @Post('create')
+  @UseFilters(new I18nValidationExceptionFilter())
   @SetMetadata(CHECK_POLICIES_KEY, [new CreatePolicyHandler()])
   async createUser(@Body() createUserDto: CreateUserDto): Promise<string> {
     try {

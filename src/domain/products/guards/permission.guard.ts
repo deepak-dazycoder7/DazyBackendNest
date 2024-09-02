@@ -22,7 +22,7 @@ export class ProductGuard implements CanActivate {
     const { user } = context.switchToHttp().getRequest();
 
     if (!user || !user.role) {
-      throw new ForbiddenException('User role not found');
+      throw new ForbiddenException();
     }
 
     const ability = this.abilityFactory.createForUser(user.role);
@@ -30,7 +30,7 @@ export class ProductGuard implements CanActivate {
     const hasAccess = policyHandlers.every(handler => handler.handle(ability));
 
     if (!hasAccess) {
-      throw new ForbiddenException('Only Admin And Manager can access');
+      throw new ForbiddenException();
     }
 
     return hasAccess;

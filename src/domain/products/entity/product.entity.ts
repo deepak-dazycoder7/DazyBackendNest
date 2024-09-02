@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { PropertyTypeEntity } from '../property-type/entity/property-type.entity';
 
 @Entity('product')
 export class ProductEntity {
@@ -17,8 +18,8 @@ export class ProductEntity {
   @Column({ length: 255 })
   location: string;
 
-  @Column({ type: 'enum', enum: ['room', 'house'], default: 'room' })
-  propertyType: 'room' | 'house';
+  @ManyToOne(() => PropertyTypeEntity, { eager: true })
+  propertyType: PropertyTypeEntity;
 
   @Column({ default: true })
   isAvailable: boolean;

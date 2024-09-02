@@ -18,7 +18,7 @@ export class ProductController {
   constructor(
     private readonly productService: ProductService,
     @Inject('CREATE_RESPONSE') private readonly returnResponse
-  ) { }
+  ) {}
 
   // Create product
   @Post('create')
@@ -112,7 +112,7 @@ export class ProductController {
           new ParseFilePipe({
             validators: [
               new MaxFileSizeValidator({ maxSize: 3 * 1024 * 1024 }), // 3 MB
-              new FileTypeValidator({ fileType: /^(image\/jpeg|image\/jpg|image\/png|image\/gif)$/ }),
+              new FileTypeValidator({ fileType: /^(image\/jpeg|image\/jpg|image\/png)$/ }),
             ],
           }).transform(file);
         }
@@ -123,7 +123,7 @@ export class ProductController {
         for (const file of files.videos) {
           new ParseFilePipe({
             validators: [
-              new MaxFileSizeValidator({ maxSize: 15 * 1024 * 1024 }), // 10 MB
+              new MaxFileSizeValidator({ maxSize: 15 * 1024 * 1024 }), // 15 MB
               new FileTypeValidator({ fileType: /^(video\/mp4|video\/mkv|video\/avi)$/ }),
             ],
           }).transform(file);

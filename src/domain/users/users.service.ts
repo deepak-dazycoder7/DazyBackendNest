@@ -53,7 +53,7 @@ export class UsersService {
     }
     return user;
   }
-
+  //read all user
   async getAllUsers() : Promise<UserEntity[]> {
     const users = await this.userRepository.find();
     if (!users || users.length === 0) {

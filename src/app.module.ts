@@ -14,6 +14,8 @@ import { JwtStrategy } from './modules/common/jwtstrategy/jwt.strategy';
 import { UserAbilityFactory } from './domain/users/permission-abilities/user-ability.factory';
 import { ProductEntity } from './domain/products/entity/product.entity';
 import { ProductModule } from './domain/products/products.module';
+import { PropertyTypeEntity } from './domain/products/property-type/entity/property-type.entity';
+import { MultiLangModule } from './modules/common/multi-language/multi-lang.module';
 
 @Module({
   imports: [
@@ -27,11 +29,13 @@ import { ProductModule } from './domain/products/products.module';
       username: process.env.DATABASE_USER || 'root',
       password: process.env.DATABASE_PASSWORD || '',
       database: process.env.DATABASE_NAME || 'dazynestdb',
-      entities: [UserEntity, ProductEntity],
+      entities: [UserEntity, ProductEntity, PropertyTypeEntity],
       synchronize: true,
     }),
+    
     AuthModule,
     UsersModule,
+    MultiLangModule,
     CommonModule,
     ProductModule,
   ],

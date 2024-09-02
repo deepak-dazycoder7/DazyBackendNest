@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsBoolean, IsOptional,  IsEnum, IsDate, IsArray, IsUrl, IsPostalCode } from 'class-validator';
+import { IsString, IsNotEmpty, IsBoolean, IsOptional,  IsNumber, IsDate, IsArray, IsPostalCode } from 'class-validator';
 import { Type } from 'class-transformer';
 
 
@@ -18,9 +18,9 @@ export class CreateProductDto {
   @IsNotEmpty()
   location: string;
 
-  @IsEnum(['room', 'house'])
-  @IsOptional()
-  propertyType?: 'room' | 'house' = 'room';
+  @IsNotEmpty()
+  @IsNumber()
+  propertyTypeId: number; 
 
   @IsBoolean()
   @IsOptional()
