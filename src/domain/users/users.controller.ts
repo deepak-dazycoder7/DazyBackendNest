@@ -1,4 +1,4 @@
-import {Body, Controller, Post, Put, Param, Delete, Inject, Get, UseGuards, UseFilters } from '@nestjs/common';
+import { Body, Controller, Post, Put, Param, Delete, Inject, Get, UseGuards, UseFilters } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dtos/create.user.dto';
 import { UpdateUserProfileDto } from './dtos/update.user.dto';
@@ -62,7 +62,7 @@ export class UsersController {
   async getOne(@Param('id') id: number): Promise<string> {
     try {
       const user = await this.usersService.getUserById(id);
-      const { password, ...getUser} = user;
+      const { password, ...getUser } = user;
       return this.returnResponse(`User Id ${id} Fetched Successfully`, 200, getUser)
     } catch (error) {
       return this.returnResponse(error.message, 400, null)
@@ -74,7 +74,7 @@ export class UsersController {
   async getAll(): Promise<string> {
     try {
       const users = await this.usersService.getAllUsers();
-      const getUsers = users.map(({password, ...user}) => user)
+      const getUsers = users.map(({ password, ...user }) => user)
       return this.returnResponse('All Users Fetched Successfully', 200, getUsers);
     } catch (error) {
       return this.returnResponse(error.message, 400, null)

@@ -15,10 +15,6 @@ export class UsersService {
 
   //create user
   async  createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
-    const existingUser = await this.userRepository.findOne({ where: { email: createUserDto.email } });
-    if (existingUser) {
-      throw new ConflictException('User already registered with this email');
-    }
     const newUser = this.userRepository.create(createUserDto);
     newUser.password = await bcrypt.hash(createUserDto.password, 10);
     const savedUser = await this.userRepository.save(newUser);

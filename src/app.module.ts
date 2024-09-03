@@ -8,7 +8,7 @@ import { UserEntity } from './domain/users/entity/user.entity';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { HttpExceptionFilter } from 'src/modules/common/exceptionFilter/http-exception.filter';
 import { JwtAuthGuard } from 'src/modules/common/guards/jwt.auth.guard';
-import { LoggerMiddleware } from './modules/common/middlewares/app.middleware';
+import { LocaleMiddleware } from './modules/common/middlewares/app.middleware';
 import { UserSeeder } from './domain/adminSeed/admin.seed';
 import { JwtStrategy } from './modules/common/jwtstrategy/jwt.strategy';
 import { UserAbilityFactory } from './domain/users/permission-abilities/user-ability.factory';
@@ -43,7 +43,7 @@ import { MultiLangModule } from './modules/common/multi-language/multi-lang.modu
   providers: [
     UserAbilityFactory,
     { provide: APP_GUARD, useClass: JwtAuthGuard },
-    { provide: APP_FILTER, useClass: HttpExceptionFilter },
+  //  { provide: APP_FILTER, useClass: HttpExceptionFilter },
     UserSeeder,
     JwtStrategy,
   ],
@@ -51,7 +51,7 @@ import { MultiLangModule } from './modules/common/multi-language/multi-lang.modu
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggerMiddleware).forRoutes('*');
+    consumer.apply(LocaleMiddleware).forRoutes('*');
   }
   constructor(private readonly userSeeder: UserSeeder) { }
   async onModuleInit() {
