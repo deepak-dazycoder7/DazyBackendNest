@@ -5,12 +5,14 @@ import * as bcrypt from 'bcrypt';
 import { UserEntity } from 'src/domain/users/entity/user.entity';
 import { UserRepository } from './repository/user.repository';
 import { UpdateUserProfileDto } from './dtos/update.user.dto';
+import { I18nContext, I18nService } from 'nestjs-i18n';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: UserRepository,
+    private readonly i18n: I18nService,
   ) {}
 
   //create user
@@ -23,29 +25,21 @@ export class UsersService {
 
   //update user
   async updateUserProfile(id: number, updateUserProfileDto: UpdateUserProfileDto): Promise<UserEntity> {
-    const user = await this.userRepository.findOne({ where: { id }});
-    if (!user) {
-      throw new NotFoundException('User not found');
-    } 
-    Object.assign(user, updateUserProfileDto);
-    return await this.userRepository.save(user);
+    await this.userRepository.update(id, updateUserProfileDto);
+    return this.userRepository.findOne({ where: { id } });
   }
 
   //remove user
-  async removeUser(id: number): Promise<UserEntity> {
-    const user = await this.userRepository.findOne({ where: { id } });
-    if (!user) {
-      throw new NotFoundException(`User With Id ${id} Not Found`)
-    }
+  async removeUser(id: number): Promise<void> {
     await this.userRepository.delete(id);
-    return user;
   }
 
   //read user
   async getUserById(id: number) :Promise<UserEntity> {
     const user = await this.userRepository.findOne({ where: { id }});
     if(!user) {
-      throw new NotFoundException(`User with id ${id} Not Found`)
+      const errorMessage = this.i18n.t('errors.not_found.user', {lang : I18nContext.current().lang})
+      throw new NotFoundException(errorMessage)
     }
     return user;
   }
@@ -53,7 +47,8 @@ export class UsersService {
   async getAllUsers() : Promise<UserEntity[]> {
     const users = await this.userRepository.find();
     if (!users || users.length === 0) {
-      throw new NotFoundException('No users found');
+      const errorMessage = this.i18n.t('errors.not_found.user', {lang : I18nContext.current().lang})
+      throw new NotFoundException(errorMessage);
     }
     return users;
   }

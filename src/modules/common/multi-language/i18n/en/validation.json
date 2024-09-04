@@ -1,6 +1,11 @@
 {
-    "validation.failed": "Validation failed",
     "isNotEmpty": "The field cannot be empty",
-    "isEmail": "Invalid email format"
+    "isEmail": "Invalid email format",
+    "isString": "The field must be a string",
+    "minLength": "The field must be at least {0} characters long",
+    "matches": "The field must contain at least one number and one special character",
+    "passwordIsString": "Password must be a string",
+    "passwordMinLength": "Password must be at least 6 characters long",
+    "passwordMatches": "Password must contain at least one number and one special character",
+    "roleIsNotEmpty": "Role is required"
   }
-  

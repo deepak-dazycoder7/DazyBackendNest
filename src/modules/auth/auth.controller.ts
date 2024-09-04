@@ -2,30 +2,29 @@ import { Body, Controller, Post, UnauthorizedException, Inject, Req } from '@nes
 import { AuthService } from './auth.service';
 import { SignInDto } from './dto/auth.signIn.dto';
 import { Public } from 'src/modules/common/decorators/publice.decorator';
-import { Request } from 'express';
+import { I18n, I18nContext } from 'nestjs-i18n';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
-    @Inject('CREATE_RESPONSE') private readonly returnResponse,
-  ) { }
+    @Inject('CREATE_RESPONSE') private readonly ResponseService 
+  ) {}
 
   @Post('sign-in')
   @Public()
-  async login(@Body() signinDto: SignInDto): Promise<any> {
+  async login(@Body() signinDto: SignInDto, @I18n() i18n: I18nContext): Promise<any> {
     try {
       const user = await this.authService.SignIn(signinDto);
       const token = await this.authService.generateToken(user);
 
       const { password, ...sanitizedUser } = user;
 
-      return this.returnResponse('User signed in successfully', 201, { user: sanitizedUser, token });
+      return this.ResponseService(i18n.t('message.signin_success'), 200, { user: sanitizedUser, token });
     } catch (error) {
       if (error instanceof UnauthorizedException) {
-        return this.returnResponse(error.message, 401, null);
+        return this.ResponseService(error.message, 401, null);
       }
-      throw error;
     }
   }
 

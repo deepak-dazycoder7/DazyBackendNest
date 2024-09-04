@@ -1,0 +1,11 @@
+{
+    "signin_success": "Sign-in successful!",
+    "create_success": {
+          "user": "User created successfully!",
+          "product": "Product created successfully!"
+        },
+    "update_success": {
+            "user": "User updated successfully!",
+            "product": "Product updated successfully!"
+        }
+}

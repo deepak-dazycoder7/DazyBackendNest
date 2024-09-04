@@ -1,14 +1,16 @@
 import { IsEmail, IsNotEmpty, IsString, Matches, MinLength } from 'class-validator';
+import { i18nValidationMessage } from 'nestjs-i18n';
 
 export class SignInDto {
-  @IsEmail({}, { message: 'Invalid Email Format' })
-  @IsNotEmpty({ message: 'Email is required' })
+  @IsEmail({}, { message: i18nValidationMessage('validation.isEmail') })
+  @IsString({ message: i18nValidationMessage('validation.isString') })
+  @IsNotEmpty({ message: i18nValidationMessage('validation.isNotEmpty') })
   email: string;
 
-  @IsString({ message: 'Password must be a string' })
-  @MinLength(6, { message: 'Password must be at least 6 characters long' })
-  @Matches(/^(?=.*[0-9])(?=.*[@#$%^&*])[0-9a-zA-Z@#$%^&*]{6,}$/, {
-    message: 'Password must contain at least one number and one special character',
+  @IsString({ message: i18nValidationMessage('validation.passwordIsString') })
+  @MinLength(6, { message: i18nValidationMessage('validation.passwordMinLength') })
+  @Matches(/^(?=.*[0-9])(?=.*[@#$%^&*])[a-zA-Z0-9@#$%^&*]{6,}$/, {
+    message: i18nValidationMessage('validation.passwordMatches'),
   })
   password: string;
 }

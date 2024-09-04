@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { UserEntity } from 'src/domain/users/entity/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { I18nService, I18nContext } from 'nestjs-i18n';
 
 
 
@@ -14,19 +15,22 @@ export class AuthService {
     @InjectRepository(UserEntity)
     private userRepository: Repository<UserEntity>,
     private jwtService: JwtService,
-  //  private readonly blacklistedTokens: Set<string> = new Set()
+    private readonly i18n: I18nService,
   ) { }
 
   // SignIn validation
   async SignIn(signinDto: SignInDto): Promise<UserEntity> {
     const { email, password } = signinDto;
     const user = await this.userRepository.findOne({ where: { email } });
+
     if (!user) {
-      throw new NotFoundException('User not found');
+      const errorMessage = this.i18n.t('errors.user_not_found', { lang: I18nContext.current().lang });
+      throw new NotFoundException(errorMessage);
     }
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      throw new NotFoundException('Password Does Not Match');
+      const errorMessage = this.i18n.t('errors.password_not_match', { lang: I18nContext.current().lang })
+      throw new NotFoundException(errorMessage);
     }
     return user;
   }

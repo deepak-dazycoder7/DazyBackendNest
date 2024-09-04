@@ -43,7 +43,7 @@ import { MultiLangModule } from './modules/common/multi-language/multi-lang.modu
   providers: [
     UserAbilityFactory,
     { provide: APP_GUARD, useClass: JwtAuthGuard },
-  //  { provide: APP_FILTER, useClass: HttpExceptionFilter },
+    { provide: APP_FILTER, useClass: HttpExceptionFilter },
     UserSeeder,
     JwtStrategy,
   ],

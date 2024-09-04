@@ -18,7 +18,6 @@ import { UsersModule } from 'src/domain/users/users.module';
           path: path.join(process.cwd(), 'src/modules/common/multi-language/i18n/'), 
           watch: true, 
       },
-      typesOutputPath: path.join(__dirname, '../src/generated/i18n.generated.ts'),
       resolvers: [
         { use: QueryResolver, options: ['lang'] },
         AcceptLanguageResolver,

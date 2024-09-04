@@ -2,7 +2,7 @@ import { ResponseDto } from '../dtos/response.dto';
 
 const successCode = [200, 201];
 
-export function returnResponse(
+export function ResponseService(
     message,
     status,
     data

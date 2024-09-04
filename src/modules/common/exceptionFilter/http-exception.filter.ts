@@ -24,10 +24,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
       responseMessage = 'Validation failed';
     } else if (exception instanceof ForbiddenException) {
       responseMessage = 'Access denied: ' + exception.message;
-    } else {
-      responseMessage = 'Internal server error'; // Fallback for other HttpExceptions
     }
-
     // Generate the response using the returnResponse function
     const returnResponse = this.returnResponseFunction(
       responseMessage,
