@@ -1,6 +1,6 @@
 import { IsString, IsDecimal, IsBoolean, IsOptional, IsEnum, IsDate, IsArray, IsUrl, IsPostalCode } from 'class-validator';
 
-export class UpdateProductDto {
+export class UpdatePropertyDto {
   @IsString()
   @IsOptional()
   name?: string;

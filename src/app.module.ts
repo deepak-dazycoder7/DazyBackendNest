@@ -12,9 +12,9 @@ import { LocaleMiddleware } from './modules/common/middlewares/app.middleware';
 import { UserSeeder } from './domain/adminSeed/admin.seed';
 import { JwtStrategy } from './modules/common/jwtstrategy/jwt.strategy';
 import { UserAbilityFactory } from './domain/users/permission-abilities/user-ability.factory';
-import { ProductEntity } from './domain/products/entity/product.entity';
-import { ProductModule } from './domain/products/products.module';
-import { PropertyTypeEntity } from './domain/products/property-type/entity/property-type.entity';
+import { PropertyEntity } from './domain/property/entity/property.entity';
+import { PropertyModule } from './domain/property/property.module';
+import { PropertyTypeEntity } from './domain/property/property-type/entity/property-type.entity';
 import { MultiLangModule } from './modules/common/multi-language/multi-lang.module';
 
 @Module({
@@ -29,7 +29,7 @@ import { MultiLangModule } from './modules/common/multi-language/multi-lang.modu
       username: process.env.DATABASE_USER || 'root',
       password: process.env.DATABASE_PASSWORD || '',
       database: process.env.DATABASE_NAME || 'dazynestdb',
-      entities: [UserEntity, ProductEntity, PropertyTypeEntity],
+      entities: [UserEntity, PropertyEntity, PropertyTypeEntity],
       synchronize: true,
     }),
     
@@ -37,7 +37,7 @@ import { MultiLangModule } from './modules/common/multi-language/multi-lang.modu
     UsersModule,
     MultiLangModule,
     CommonModule,
-    ProductModule,
+    PropertyModule,
   ],
   controllers: [],
   providers: [

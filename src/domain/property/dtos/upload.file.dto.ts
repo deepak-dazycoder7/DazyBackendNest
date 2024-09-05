@@ -1,5 +1,4 @@
-// src/products/dto/upload-file.dto.ts
-import { IsString, IsOptional, IsArray, ArrayMaxSize, IsEmpty } from 'class-validator';
+import { IsString, IsEmpty } from 'class-validator';
 
 export class UploadFileDto {
   @IsString()

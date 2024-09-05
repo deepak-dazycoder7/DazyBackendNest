@@ -4,17 +4,21 @@ import { i18nValidationMessage } from 'nestjs-i18n';
 export class UpdateUserProfileDto {
   @IsString({ message: i18nValidationMessage('validation.isString') })
   @IsNotEmpty({ message: i18nValidationMessage('validation.isNotEmpty') })
+  @IsOptional()
   firstName: string;
 
   @IsString({ message: i18nValidationMessage('validation.isString') })
   @IsNotEmpty({ message: i18nValidationMessage('validation.isNotEmpty') })
+  @IsOptional()
   lastName: string;
 
+  @IsOptional()
   @IsEmail({}, { message: i18nValidationMessage('validation.isEmail') })
   @IsString({ message: i18nValidationMessage('validation.isString') })
   @IsNotEmpty({ message: i18nValidationMessage('validation.isNotEmpty') })
   email: string;
 
+  @IsOptional()
   @IsString({ message: i18nValidationMessage('validation.passwordIsString') })
   @MinLength(6, { message: i18nValidationMessage('validation.passwordMinLength') })
   @Matches(/^(?=.*[0-9])(?=.*[@#$%^&*])[a-zA-Z0-9@#$%^&*]{6,}$/, {
@@ -23,6 +27,6 @@ export class UpdateUserProfileDto {
   password: string;
 
   @IsString({ message: i18nValidationMessage('validation.isString') })
-  @IsOptional() 
+  @IsOptional()
   avtar?: string;
 }

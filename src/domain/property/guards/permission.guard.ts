@@ -1,15 +1,15 @@
 import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { ProductAbilityFactory } from 'src/domain/products/permission-abilities/product-ability.factory';
+import { PropertyAbilityFactory } from '../permission-abilities/property-ability.factory';
 import { CHECK_POLICIES_KEY } from 'src/modules/common/decorators/policies.decorator';
-import { ProductPolicyHandler } from 'src/modules/common/casl/policy.interface';
+import { PropertyPolicyHandler } from 'src/modules/common/casl/policy.interface';
 import { IS_PUBLIC_KEY } from 'src/modules/common/decorators/publice.decorator';
 
 @Injectable()
-export class ProductGuard implements CanActivate {
+export class PropertyGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
-    private abilityFactory: ProductAbilityFactory,
+    private abilityFactory: PropertyAbilityFactory,
   ) {}
 
   canActivate(context: ExecutionContext): boolean {
@@ -18,7 +18,7 @@ export class ProductGuard implements CanActivate {
       return true;
     }
 
-    const policyHandlers = this.reflector.get<ProductPolicyHandler[]>(CHECK_POLICIES_KEY, context.getHandler()) || [];
+    const policyHandlers = this.reflector.get<PropertyPolicyHandler[]>(CHECK_POLICIES_KEY, context.getHandler()) || [];
     const { user } = context.switchToHttp().getRequest();
 
     if (!user || !user.role) {

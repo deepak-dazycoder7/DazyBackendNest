@@ -23,8 +23,7 @@ export class UsersController {
   async createUser(@Body() createUserDto: CreateUserDto, @I18n() i18n : I18nContext): Promise<string> {
     try {
       const user = await this.usersService.createUser(createUserDto);
-      const { password, ...userCreate } = user;
-      return this.ResponseService(i18n.t('message.create_success.user'), 200, userCreate);
+      return this.ResponseService(i18n.t('message.create_success.user'), 200, user);
     } catch (error) {
       return this.ResponseService(error.message, 400, null);
     }
@@ -36,8 +35,7 @@ export class UsersController {
   async updateUserProfile(@Param('id') id: number, @Body() updateUserProfileDto: UpdateUserProfileDto, @I18n() i18n : I18nContext): Promise<string> {
     try {
       const user = await this.usersService.updateUserProfile(id, updateUserProfileDto);
-      const { password, ...userUpdate } = user
-      return this.ResponseService(i18n.t('message.update_success.user'), 200, userUpdate);
+      return this.ResponseService(i18n.t('message.update_success.user'), 200, user);
     } catch (error) {
       return this.ResponseService(error.message, 400, null);
     }
@@ -46,10 +44,10 @@ export class UsersController {
   // delete user
   @Delete('remove/:id')
   @SetMetadata(CHECK_POLICIES_KEY, [new DeletePolicyHandler()])
-  async removeUser(@Param('id') id: number): Promise<string> {
+  async removeUser(@Param('id') id: number, @I18n() i18n : I18nContext): Promise<string> {
     try {
       await this.usersService.removeUser(id);
-      return this.ResponseService(`User Id ${id} Has Been Deleted`, 200, null);
+      return this.ResponseService(i18n.t('message.delete_success.user'), 200, null);
     } catch (error) {
       return this.ResponseService(error.message, 400, null);
     }
@@ -58,11 +56,10 @@ export class UsersController {
   // Get/read users
   @Get('/:id')
   @SetMetadata(CHECK_POLICIES_KEY, [new ReadPolicyHandler()])
-  async getOne(@Param('id') id: number): Promise<string> {
+  async getOne(@Param('id') id: number, @I18n() i18n: I18nContext): Promise<string> {
     try {
       const user = await this.usersService.getUserById(id);
-      const { password, ...getUser } = user;
-      return this.ResponseService(`User Id ${id} Fetched Successfully`, 200, getUser)
+      return this.ResponseService(i18n.t('message.fetch_success.user'), 200, user)
     } catch (error) {
       return this.ResponseService(error.message, 400, null)
     }
@@ -70,11 +67,10 @@ export class UsersController {
 
   @Get()
   @SetMetadata(CHECK_POLICIES_KEY, [new ReadPolicyHandler()])
-  async getAll(): Promise<string> {
+  async getAll(@I18n() i18n : I18nContext): Promise<string> {
     try {
       const users = await this.usersService.getAllUsers();
-      const getUsers = users.map(({ password, ...user }) => user)
-      return this.ResponseService('All Users Fetched Successfully', 200, getUsers);
+      return this.ResponseService(i18n.t('message.fetch_success.user'), 200, users);
     } catch (error) {
       return this.ResponseService(error.message, 400, null)
     }

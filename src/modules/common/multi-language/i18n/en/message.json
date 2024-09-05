@@ -7,5 +7,13 @@
     "update_success": {
             "user": "User updated successfully!",
             "product": "Product updated successfully!"
-        }
+        },
+    "delete_success": {
+        "user": "User deleted successfully!",
+        "product": "Product deleted successfully!"
+      },
+    "fetch_success": {
+        "user": "User Fetched Successfully!",
+        "product": "Product Fetched Successfully"
+      }
 }

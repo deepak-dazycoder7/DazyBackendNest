@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { SignInDto } from './dto/auth.signIn.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -24,13 +24,13 @@ export class AuthService {
     const user = await this.userRepository.findOne({ where: { email } });
 
     if (!user) {
-      const errorMessage = this.i18n.t('errors.user_not_found', { lang: I18nContext.current().lang });
-      throw new NotFoundException(errorMessage);
+      const errorMessage = this.i18n.t('errors.not_found.user', { lang: I18nContext.current().lang });
+      throw new UnauthorizedException(errorMessage);
     }
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       const errorMessage = this.i18n.t('errors.password_not_match', { lang: I18nContext.current().lang })
-      throw new NotFoundException(errorMessage);
+      throw new UnauthorizedException(errorMessage);
     }
     return user;
   }

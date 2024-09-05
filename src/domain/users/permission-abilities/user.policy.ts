@@ -1,7 +1,7 @@
 import { AppAbility } from 'src/domain/users/permission-abilities/user-ability.factory';
 import { UserPolicyHandler } from 'src/modules/common/casl/policy.interface';
 import { UserEntity } from 'src/domain/users/entity/user.entity';
-import { Action } from 'src/domain/products/enums/action.enum';
+import { Action } from 'src/domain/property/enums/action.enum';
 
 export class CreatePolicyHandler implements UserPolicyHandler {
   handle(ability: AppAbility): boolean {

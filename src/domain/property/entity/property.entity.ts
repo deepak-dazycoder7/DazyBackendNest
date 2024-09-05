@@ -1,8 +1,9 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { PropertyTypeEntity } from '../property-type/entity/property-type.entity';
+import { Exclude } from 'class-transformer';
 
-@Entity('product')
-export class ProductEntity {
+@Entity('property')
+export class PropertyEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -55,4 +56,23 @@ export class ProductEntity {
 
   @Column('simple-array', { nullable: true })
   videos: string[];
+
+  @CreateDateColumn({
+    type: 'timestamp',
+    precision: 0, 
+    nullable: true, 
+    default: null,
+  })
+  @Exclude()
+  created_at: Date;
+
+  @UpdateDateColumn({
+    type: 'timestamp',
+    precision: 0, 
+    nullable: true,
+    default: null,
+    onUpdate: 'CURRENT_TIMESTAMP'
+  })
+  @Exclude()
+  updated_at: Date;
 }

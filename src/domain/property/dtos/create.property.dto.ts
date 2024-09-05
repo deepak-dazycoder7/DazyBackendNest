@@ -2,7 +2,7 @@ import { IsString, IsNotEmpty, IsBoolean, IsOptional,  IsNumber, IsDate, IsArray
 import { Type } from 'class-transformer';
 
 
-export class CreateProductDto {
+export class CreatePropertyDto {
   @IsString()
   @IsNotEmpty()
   name: string;

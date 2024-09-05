@@ -1,86 +1,86 @@
 import { Body, Controller, Post, Put, Param, Delete, Get, Inject, SetMetadata, UseGuards, UseInterceptors, UploadedFiles, BadRequestException } from '@nestjs/common';
 import { ParseFilePipe, MaxFileSizeValidator, FileTypeValidator } from '@nestjs/common';
-import { ProductService } from './products.service';
-import { CreateProductDto } from 'src/domain/products/dtos/create.product.dto';
-import { UpdateProductDto } from 'src/domain/products/dtos/update.product.dto';
+import { PropertyService } from './property.service';
+import { CreatePropertyDto } from 'src/domain/property/dtos/create.property.dto';
+import { UpdatePropertyDto } from 'src/domain/property/dtos/update.property.dto';
 import { CHECK_POLICIES_KEY } from 'src/modules/common/decorators/policies.decorator';
-import { CreateProductHandler, UpdateProductHandler, DeleteProductHandler, ReadProductHandler, UploadFileHandler } from 'src/domain/products/permission-abilities/product.policy';
+import { CreatePropertyHandler, UpdatePropertyHandler, DeletePropertyHandler, ReadPropertyHandler, UploadFileHandler } from 'src/domain/property/permission-abilities/property.policy';
 import { JwtAuthGuard } from 'src/modules/common/guards/jwt.auth.guard';
-import { ProductGuard } from './guards/permission.guard';
-import { UploadFileDto } from 'src/domain/products/dtos/upload.file.dto';
+import { PropertyGuard } from './guards/permission.guard';
+import { UploadFileDto } from 'src/domain/property/dtos/upload.file.dto';
 import { multerOptions } from './multer-config';
 import { FileFieldsInterceptor } from '@nestjs/platform-express/multer';
 
 
-@Controller('products')
-@UseGuards(ProductGuard, JwtAuthGuard)
-export class ProductController {
+@Controller('property')
+@UseGuards(PropertyGuard, JwtAuthGuard)
+export class PropertyController {
   constructor(
-    private readonly productService: ProductService,
+    private readonly PropertyService: PropertyService,
     @Inject('CREATE_RESPONSE') private readonly returnResponse
   ) {}
 
-  // Create product
+  // Create Property
   @Post('create')
-  @SetMetadata(CHECK_POLICIES_KEY, [new CreateProductHandler()])
-  async createProduct(@Body() createProductDto: CreateProductDto): Promise<any> {
+  @SetMetadata(CHECK_POLICIES_KEY, [new CreatePropertyHandler()])
+  async createProperty(@Body() createPropertyDto: CreatePropertyDto): Promise<any> {
     try {
-      const product = await this.productService.createProduct(createProductDto);
-      return this.returnResponse('Product Created Successfully', 201, product);
+      const Property = await this.PropertyService.createProperty(createPropertyDto);
+      return this.returnResponse('Property Created Successfully', 201, Property);
     } catch (error) {
       return this.returnResponse(error.message, 500, null);
     }
   }
 
-  // Update product
+  // Update Property
   @Put('update/:id')
-  @SetMetadata(CHECK_POLICIES_KEY, [new UpdateProductHandler()])
-  async updateProduct(@Param('id') id: number, @Body() updateProductDto: UpdateProductDto): Promise<any> {
+  @SetMetadata(CHECK_POLICIES_KEY, [new UpdatePropertyHandler()])
+  async updateProperty(@Param('id') id: number, @Body() updatePropertyDto: UpdatePropertyDto): Promise<any> {
     try {
-      const product = await this.productService.updateProduct(id, updateProductDto);
-      return this.returnResponse('Product details Updated Successfully', 201, product);
+      const Property = await this.PropertyService.updateProperty(id, updatePropertyDto);
+      return this.returnResponse('Property details Updated Successfully', 201, Property);
     } catch (error) {
       return this.returnResponse(error.message, 500, null);
     }
   }
 
-  // Delete product
+  // Delete Property
   @Delete('remove/:id')
-  @SetMetadata(CHECK_POLICIES_KEY, [new DeleteProductHandler()])
-  async deleteProduct(@Param('id') id: number): Promise<any> {
+  @SetMetadata(CHECK_POLICIES_KEY, [new DeletePropertyHandler()])
+  async deleteProperty(@Param('id') id: number): Promise<any> {
     try {
-      await this.productService.deleteProduct(id);
-      return this.returnResponse(`Product Id ${id} has been deleted`, 201, null);
+      await this.PropertyService.deleteProperty(id);
+      return this.returnResponse(`Property Id ${id} has been deleted`, 201, null);
     } catch (error) {
       return this.returnResponse(error.message, 500, null);
     }
   }
 
-  // Get/read product by id
+  // Get/read Property by id
   @Get('/:id')
-  @SetMetadata(CHECK_POLICIES_KEY, [new ReadProductHandler()])
+  @SetMetadata(CHECK_POLICIES_KEY, [new ReadPropertyHandler()])
   async getOne(@Param('id') id: number): Promise<any> {
     try {
-      const product = await this.productService.getProductById(id);
-      return this.returnResponse(`Product Id ${id} Fetched Successfully`, 201, product);
+      const Property = await this.PropertyService.getPropertyById(id);
+      return this.returnResponse(`Property Id ${id} Fetched Successfully`, 201, Property);
     } catch (error) {
       return this.returnResponse(error.message, 500, null);
     }
   }
 
-  // Get all products
+  // Get all Propertys
   @Get()
-  @SetMetadata(CHECK_POLICIES_KEY, [new ReadProductHandler()])
+  @SetMetadata(CHECK_POLICIES_KEY, [new ReadPropertyHandler()])
   async getAll(): Promise<any> {
     try {
-      const products = await this.productService.getAllProducts();
-      return this.returnResponse('All Products Fetched Successfully', 200, products);
+      const Propertys = await this.PropertyService.getAllPropertys();
+      return this.returnResponse('All Propertys Fetched Successfully', 200, Propertys);
     } catch (error) {
       return this.returnResponse(error.message, 500, null);
     }
   }
 
-  //product file uploades
+  //Property file uploades
   @Post('upload/:id')
   @SetMetadata(CHECK_POLICIES_KEY, [new UploadFileHandler()])
   @UseInterceptors(
@@ -131,8 +131,8 @@ export class ProductController {
       }
 
       // Call the service to handle the files
-      const productFile = await this.productService.uploadFiles(id, uploadFileDto, files);
-      return this.returnResponse('Files uploaded successfully', 200, productFile);
+      const PropertyFile = await this.PropertyService.uploadFiles(id, uploadFileDto, files);
+      return this.returnResponse('Files uploaded successfully', 200, PropertyFile);
     } catch (error) {
       return this.returnResponse(error.message, 500, null);
     }

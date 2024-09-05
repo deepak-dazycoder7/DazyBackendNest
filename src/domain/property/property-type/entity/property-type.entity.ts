@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity('property_types')
@@ -17,6 +18,7 @@ export class PropertyTypeEntity {
     nullable: true, 
     default: null,
   })
+  @Exclude()
   created_at: Date;
 
   @UpdateDateColumn({
@@ -26,5 +28,6 @@ export class PropertyTypeEntity {
     default: null,
     onUpdate: 'CURRENT_TIMESTAMP'
   })
+  @Exclude()
   updated_at: Date;
 }

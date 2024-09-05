@@ -17,10 +17,7 @@ export class AuthController {
     try {
       const user = await this.authService.SignIn(signinDto);
       const token = await this.authService.generateToken(user);
-
-      const { password, ...sanitizedUser } = user;
-
-      return this.ResponseService(i18n.t('message.signin_success'), 200, { user: sanitizedUser, token });
+      return this.ResponseService(i18n.t('message.signin_success'), 200, { user, token });
     } catch (error) {
       if (error instanceof UnauthorizedException) {
         return this.ResponseService(error.message, 401, null);

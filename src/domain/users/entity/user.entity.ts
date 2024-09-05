@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { Exclude } from 'class-transformer';
 
 @Entity('user')
@@ -24,6 +24,25 @@ export class UserEntity  {
 
   @Column({ default: true })
   status: boolean;
+
+  @CreateDateColumn({
+    type: 'timestamp',
+    precision: 0, 
+    nullable: true, 
+    default: null,
+  })
+  @Exclude()
+  created_at: Date;
+
+  @UpdateDateColumn({
+    type: 'timestamp',
+    precision: 0, 
+    nullable: true,
+    default: null,
+    onUpdate: 'CURRENT_TIMESTAMP'
+  })
+  @Exclude()
+  updated_at: Date;
 
   @Column()
   avtar: string;

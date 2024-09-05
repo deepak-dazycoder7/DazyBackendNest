@@ -1,10 +1,10 @@
 import {  Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult } from 'typeorm';
-import { PropertyTypeEntity } from './entity/property-type.entity';
-import { PropertyTypeRepository } from './repository/property-type.repository';
-import { CreatePropertyTypeDto } from './dtos/create-propertyType.dto';
-import { UpdatePropertyTypeDto } from './dtos/update-propertyType.dto';
+import { PropertyTypeEntity } from 'src/domain/property/property-type/entity/property-type.entity';
+import { PropertyTypeRepository } from 'src/domain/property/property-type/repository/property-type.repository';
+import { CreatePropertyTypeDto } from 'src/domain/property/property-type//dtos/create-propertyType.dto';
+import { UpdatePropertyTypeDto } from 'src/domain/property/property-type/dtos/update-propertyType.dto';
 @Injectable()
 export class PropertyTypeService {
   constructor(
