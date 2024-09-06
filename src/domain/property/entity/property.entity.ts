@@ -13,13 +13,16 @@ export class PropertyEntity {
   @Column('text')
   description: string;
 
-  @Column('decimal')
+  @Column('decimal', { precision: 10, scale: 2 })
   price: number;
 
   @Column({ length: 255 })
   location: string;
 
-  @ManyToOne(() => PropertyTypeEntity, { eager: true })
+  @ManyToOne(() => PropertyTypeEntity, (propertyType) => propertyType.properties, {
+    onDelete: 'SET NULL', // or 'CASCADE' or 'RESTRICT' as per your needs
+    eager: true,
+  })
   propertyType: PropertyTypeEntity;
 
   @Column({ default: true })
@@ -34,7 +37,6 @@ export class PropertyEntity {
   @Column({ type: 'date', nullable: true })
   availableTo: Date;
 
-  // Address fields
   @Column({ length: 255 })
   street: string;
 
@@ -50,7 +52,6 @@ export class PropertyEntity {
   @Column({ length: 100 })
   country: string;
 
-  // New fields for file paths
   @Column('simple-array', { nullable: true })
   images: string[];
 
@@ -59,8 +60,8 @@ export class PropertyEntity {
 
   @CreateDateColumn({
     type: 'timestamp',
-    precision: 0, 
-    nullable: true, 
+    precision: 0,
+    nullable: true,
     default: null,
   })
   @Exclude()
@@ -68,10 +69,10 @@ export class PropertyEntity {
 
   @UpdateDateColumn({
     type: 'timestamp',
-    precision: 0, 
+    precision: 0,
     nullable: true,
     default: null,
-    onUpdate: 'CURRENT_TIMESTAMP'
+    onUpdate: 'CURRENT_TIMESTAMP',
   })
   @Exclude()
   updated_at: Date;

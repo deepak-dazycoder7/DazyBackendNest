@@ -1,0 +1,4 @@
+query: START TRANSACTION
+query: INSERT INTO `property`(`id`, `name`, `description`, `price`, `location`, `isAvailable`, `amenities`, `availableFrom`, `availableTo`, `street`, `city`, `state`, `zipCode`, `country`, `images`, `videos`, `created_at`, `updated_at`, `propertyTypeId`) VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT) -- PARAMETERS: ["dfgdfgdfgdfgf","Beautiful house",250000,"New York",1,"WiFi,Pool,Parking","2024-09-10","2025-09-10","123 Street","NYC","NY","10001","USA"]
+query: SELECT `PropertyEntity`.`id` AS `PropertyEntity_id`, `PropertyEntity`.`isAvailable` AS `PropertyEntity_isAvailable`, `PropertyEntity`.`created_at` AS `PropertyEntity_created_at`, `PropertyEntity`.`updated_at` AS `PropertyEntity_updated_at` FROM `property` `PropertyEntity` WHERE `PropertyEntity`.`id` = ? -- PARAMETERS: [20]  
+query: COMMIT

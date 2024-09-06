@@ -1,25 +1,26 @@
-import { IsString, IsNotEmpty, IsBoolean, IsOptional,  IsNumber, IsDate, IsArray, IsPostalCode } from 'class-validator';
+import { IsString, IsNotEmpty, IsBoolean, IsOptional, IsNumber, IsDate, IsArray, IsPostalCode } from 'class-validator';
 import { Type } from 'class-transformer';
-
+import { i18nValidationMessage } from 'nestjs-i18n';
 
 export class CreatePropertyDto {
-  @IsString()
-  @IsNotEmpty()
+  @IsString({ message: i18nValidationMessage('validation.isString') })
+  @IsNotEmpty({ message: i18nValidationMessage('validation.isNotEmpty') })
   name: string;
 
-  @IsString()
-  @IsNotEmpty()
+  @IsString({ message: i18nValidationMessage('validation.isString') })
+  @IsNotEmpty({ message: i18nValidationMessage('validation.isNotEmpty') })
   description: string;
 
-  @IsNotEmpty()
+  @IsNotEmpty({ message: i18nValidationMessage('validation.isNotEmpty') })
+  @IsNumber({},{ message: i18nValidationMessage('validation.isNumber') })
   price: number;
 
-  @IsString()
-  @IsNotEmpty()
+  @IsString({ message: i18nValidationMessage('validation.isString') })
+  @IsNotEmpty({ message: i18nValidationMessage('validation.isNotEmpty') })
   location: string;
 
-  @IsNotEmpty()
-  @IsNumber()
+  @IsNotEmpty({ message: i18nValidationMessage('validation.isNotEmpty') })
+  @IsNumber({},{ message: i18nValidationMessage('validation.isNumber') })
   propertyTypeId: number; 
 
   @IsBoolean()
@@ -32,31 +33,33 @@ export class CreatePropertyDto {
 
   @IsOptional()
   @IsDate()
-  @Type(() => Date)  // Ensure this is here to convert string to Date
+  @Type(() => Date)  // Ensure date is converted correctly
   availableFrom?: Date;
 
   @IsOptional()
   @IsDate()
-  @Type(() => Date)  // Ensure this is here as well
+  @Type(() => Date)  // Ensure date is converted correctly
   availableTo?: Date;
+
   // Address fields
-  @IsString()
-  @IsNotEmpty()
+  @IsString({ message: i18nValidationMessage('validation.isString') })
+  @IsNotEmpty({ message: i18nValidationMessage('validation.isNotEmpty') })
   street: string;
 
-  @IsString()
-  @IsNotEmpty()
+  @IsString({ message: i18nValidationMessage('validation.isString') })
+  @IsNotEmpty({ message: i18nValidationMessage('validation.isNotEmpty') })
   city: string;
 
-  @IsString()
-  @IsNotEmpty()
+  @IsString({ message: i18nValidationMessage('validation.isString') })
+  @IsNotEmpty({ message: i18nValidationMessage('validation.isNotEmpty') })
   state: string;
 
+  // Updated zipCode to string as per @IsPostalCode requirement
   @IsPostalCode('any')
-  @IsNotEmpty()
+  @IsNotEmpty({ message: i18nValidationMessage('validation.isNotEmpty') })
   zipCode: string;
 
-  @IsString()
-  @IsNotEmpty()
+  @IsString({ message: i18nValidationMessage('validation.isString') })
+  @IsNotEmpty({ message: i18nValidationMessage('validation.isNotEmpty') })
   country: string;
 }

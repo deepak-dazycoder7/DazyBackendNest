@@ -1,7 +1,7 @@
 {
     "not_found": {
         "user": "User not found",
-        "product": "Product not found"
+        "property": "property not found"
     },
     "password_not_match": "Password does not match"
 }

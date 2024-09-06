@@ -31,6 +31,7 @@ import { MultiLangModule } from './modules/common/multi-language/multi-lang.modu
       database: process.env.DATABASE_NAME || 'dazynestdb',
       entities: [UserEntity, PropertyEntity, PropertyTypeEntity],
       synchronize: true,
+      //logging: true,
     }),
     
     AuthModule,

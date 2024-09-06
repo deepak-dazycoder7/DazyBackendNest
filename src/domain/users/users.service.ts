@@ -15,7 +15,7 @@ export class UsersService {
     private readonly i18n: I18nService,
   ) {}
 
-  //create user
+  //create 
   async  createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
     const newUser = this.userRepository.create(createUserDto);
     newUser.password = await bcrypt.hash(createUserDto.password, 10);
@@ -23,18 +23,18 @@ export class UsersService {
     return savedUser;
   }
 
-  //update user
+  //update 
   async updateUserProfile(id: number, updateUserProfileDto: UpdateUserProfileDto): Promise<UserEntity> {
     await this.userRepository.update(id, updateUserProfileDto);
     return this.userRepository.findOne({ where: { id } });
   }
 
-  //remove user
+  //remove 
   async removeUser(id: number): Promise<void> {
     await this.userRepository.delete(id);
   }
 
-  //read user
+  //read 
   async getUserById(id: number) :Promise<UserEntity> {
     const user = await this.userRepository.findOne({ where: { id }});
     if(!user) {
@@ -43,7 +43,7 @@ export class UsersService {
     }
     return user;
   }
-  //read all user
+  //read all 
   async getAllUsers() : Promise<UserEntity[]> {
     const users = await this.userRepository.find();
     if (!users || users.length === 0) {

@@ -1,19 +1,20 @@
-import { IsString, IsDecimal, IsBoolean, IsOptional, IsEnum, IsDate, IsArray, IsUrl, IsPostalCode } from 'class-validator';
-
+import { IsString, IsDecimal, IsBoolean, IsOptional, IsEnum, IsDate, IsArray, IsUrl, IsPostalCode, IsNumber } from 'class-validator';
+import { i18nValidationMessage } from 'nestjs-i18n';
 export class UpdatePropertyDto {
-  @IsString()
+  @IsString({ message: i18nValidationMessage('validation.isString') })
   @IsOptional()
   name?: string;
 
-  @IsString()
+  @IsString({ message: i18nValidationMessage('validation.isString') })
   @IsOptional()
   description?: string;
 
   @IsDecimal()
   @IsOptional()
+  @IsNumber({},{ message: i18nValidationMessage('validation.isNumber') })
   price?: number;
 
-  @IsString()
+  @IsString({ message: i18nValidationMessage('validation.isString') })
   @IsOptional()
   location?: string;
 
@@ -42,15 +43,15 @@ export class UpdatePropertyDto {
   availableTo?: Date;
 
   // Address fields
-  @IsString()
+  @IsString({ message: i18nValidationMessage('validation.isString') })
   @IsOptional()
   street?: string;
 
-  @IsString()
+  @IsString({ message: i18nValidationMessage('validation.isString') })
   @IsOptional()
   city?: string;
 
-  @IsString()
+  @IsString({ message: i18nValidationMessage('validation.isString') })
   @IsOptional()
   state?: string;
 
@@ -58,7 +59,7 @@ export class UpdatePropertyDto {
   @IsOptional()
   zipCode?: string;
 
-  @IsString()
+  @IsString({ message: i18nValidationMessage('validation.isString') })
   @IsOptional()
   country?: string;
 }

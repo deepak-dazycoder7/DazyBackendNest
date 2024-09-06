@@ -8,6 +8,7 @@ import { CreatePolicyHandler, DeletePolicyHandler, ReadPolicyHandler, UpdatePoli
 import { UserRoleGuard } from './guards/role-permission.guard';
 import { JwtAuthGuard } from 'src/modules/common/guards/jwt.auth.guard';
 import { I18nContext, I18n } from 'nestjs-i18n';
+import { Entity } from 'typeorm';
 
 @Controller('users')
 @UseGuards(UserRoleGuard, JwtAuthGuard)
@@ -23,7 +24,7 @@ export class UsersController {
   async createUser(@Body() createUserDto: CreateUserDto, @I18n() i18n : I18nContext): Promise<string> {
     try {
       const user = await this.usersService.createUser(createUserDto);
-      return this.ResponseService(i18n.t('message.create_success.user'), 200, user);
+      return this.ResponseService(i18n.t('message.success.create', {args: {entity :"User"}}), 200, user);
     } catch (error) {
       return this.ResponseService(error.message, 400, null);
     }

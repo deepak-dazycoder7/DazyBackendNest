@@ -19,7 +19,7 @@ import { PropertyTypeModule } from './property-type/property-type.module';
       rootPath: join(__dirname, '..', 'uploads'),
       serveRoot: '/uploads', // Serve files at /uploads endpoint
     }),
-    PropertyTypeModule
+PropertyTypeModule
 ],
   controllers: [PropertyController],
   providers: [PropertyService, PropertyAbilityFactory, PropertyGuard, PropertyTypeService],

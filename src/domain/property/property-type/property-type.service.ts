@@ -1,43 +1,52 @@
-import {  Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult } from 'typeorm';
 import { PropertyTypeEntity } from 'src/domain/property/property-type/entity/property-type.entity';
 import { PropertyTypeRepository } from 'src/domain/property/property-type/repository/property-type.repository';
 import { CreatePropertyTypeDto } from 'src/domain/property/property-type//dtos/create-propertyType.dto';
 import { UpdatePropertyTypeDto } from 'src/domain/property/property-type/dtos/update-propertyType.dto';
+import { I18nContext, I18nService } from 'nestjs-i18n';
+
 @Injectable()
 export class PropertyTypeService {
   constructor(
     @InjectRepository(PropertyTypeEntity)
     private readonly propertyTypeRepository: PropertyTypeRepository,
+    private readonly i18n: I18nService
   ) { }
 
-  //create property type
-  async createPropertyType(createpropertyTypeDto: CreatePropertyTypeDto): Promise<PropertyTypeEntity> {
-    const propertyType = this.propertyTypeRepository.create(createpropertyTypeDto);
-    return await this.propertyTypeRepository.save(propertyType);
-  }
-
-  // Update property type
-  async updatePropertType(id: number, updatePropertyTypeDto: UpdatePropertyTypeDto): Promise<PropertyTypeEntity> {
-    const propertyType = this.propertyTypeRepository.create({ ...updatePropertyTypeDto, id });
+  //create 
+  async createPropertyType(Dto: CreatePropertyTypeDto): Promise<PropertyTypeEntity> {
+    const propertyType = this.propertyTypeRepository.create(Dto);
     return this.propertyTypeRepository.save(propertyType);
   }
 
-   // Delete a property type
-   async deletePropertyType(id: number): Promise<DeleteResult> {
+  // Update
+  async updatePropertType(id: number, Dto: UpdatePropertyTypeDto): Promise<PropertyTypeEntity> {
+    const propertyType = this.propertyTypeRepository.create({ ...Dto, id });
+    return this.propertyTypeRepository.save(propertyType);
+  }
+
+  // Delete 
+  async deletePropertyType(id: number): Promise<DeleteResult> {
     return this.propertyTypeRepository.delete(id);
 
   }
   //find all
   async findAll(): Promise<PropertyTypeEntity[]> {
-    return await this.propertyTypeRepository.find();
+    const propertyType = await this.propertyTypeRepository.find();
+    if (!propertyType || propertyType.length === 0) {
+      const errorMessage = await this.i18n.t('errors.not_found.property', { lang: I18nContext.current().lang })
+      throw new NotFoundException(errorMessage)
+    }
+    return propertyType;
   }
   //find one
   async findOne(id: number): Promise<PropertyTypeEntity> {
     const propertyType = await this.propertyTypeRepository.findOne({ where: { id } });
     if (!propertyType) {
-      throw new NotFoundException('Product not found');
+      const errorMessage = await this.i18n.t('errors.not_found.property', { lang: I18nContext.current().lang })
+      throw new NotFoundException(errorMessage);
     }
     return propertyType;
   }

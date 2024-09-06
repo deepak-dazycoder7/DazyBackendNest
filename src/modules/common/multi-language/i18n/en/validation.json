@@ -7,5 +7,6 @@
     "passwordIsString": "Password must be a string",
     "passwordMinLength": "Password must be at least 6 characters long",
     "passwordMatches": "Password must contain at least one number and one special character",
-    "roleIsNotEmpty": "Role is required"
+    "roleIsNotEmpty": "Role is required",
+    "isNumber": "The field must be a number"
   }
