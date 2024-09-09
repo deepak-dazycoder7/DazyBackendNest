@@ -10,6 +10,7 @@ import { join } from 'path';
 import { PropertyTypeEntity } from 'src/domain/property/property-type/entity/property-type.entity';
 import { PropertyTypeService } from './property-type/property-type.service';
 import { PropertyTypeModule } from './property-type/property-type.module';
+import { DivisionModule } from './division/division.module';
 
 
 @Module({
@@ -19,10 +20,11 @@ import { PropertyTypeModule } from './property-type/property-type.module';
       rootPath: join(__dirname, '..', 'uploads'),
       serveRoot: '/uploads', // Serve files at /uploads endpoint
     }),
-PropertyTypeModule
-],
+    DivisionModule,
+    PropertyTypeModule
+  ],
   controllers: [PropertyController],
   providers: [PropertyService, PropertyAbilityFactory, PropertyGuard, PropertyTypeService],
-  exports: [PropertyService, PropertyAbilityFactory ] 
+  exports: [PropertyService, PropertyAbilityFactory]
 })
-export class PropertyModule {}
+export class PropertyModule { }

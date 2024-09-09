@@ -1,46 +1,55 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ManyToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToMany } from "typeorm";
+import { PropertyTypeEntity } from "../../property-type/entity/property-type.entity";
 import { Exclude } from "class-transformer";
 
 @Entity('division')
 export class DivisionEntity {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column({ unique: true })
-    name: string;
+  @Column({ unique: true })
+  division_name: string;
 
-    @Column({ default: true })
-    status: boolean;
+  @Column({ default: true })
+  status: boolean;
 
-    @Column('text')
-    description: string;
+  @Column('text')
+  description: string;
 
-    @CreateDateColumn({
-        type: 'timestamp',
-        precision: 0,
-        nullable: true,
-        default: null,
-    })
-    @Exclude()
-    created_at: Date;
+  @CreateDateColumn({
+    type: 'timestamp',
+    precision: 0,
+    nullable: true,
+    default: null,
+  })
+  @Exclude()
+  created_at: Date;
 
-    @UpdateDateColumn({
-        type: 'timestamp',
-        precision: 0,
-        nullable: true,
-        default: null,
-        onUpdate: 'CURRENT_TIMESTAMP',
-    })
-    @Exclude()
-    updated_at: Date;
+  @UpdateDateColumn({
+    type: 'timestamp',
+    precision: 0,
+    nullable: true,
+    default: null,
+    onUpdate: 'CURRENT_TIMESTAMP',
+  })
+  @Exclude()
+  updated_at: Date;
 
-    // Timestamp for when the entity was deleted
-    @DeleteDateColumn({ nullable: true })
-    deletedAt: Date;
+  @DeleteDateColumn({
+    type: 'timestamp',
+    precision: 0,
+    nullable: true,
+    default: null,
+  })
+  @Exclude()
+  deleted_at: Date;
 
-    // The user who deleted the entity
-    // @ManyToOne(() => UserEntity, (user) => user.deletedEntities, { nullable: true })
-    //  deletedBy: UserEntity;
+  @Column({ nullable: true })
+  created_by: number;
 
+  @Column({ nullable: true })
+  deleted_by: number;
 
+  @OneToMany(() => PropertyTypeEntity, (propertyType) => propertyType.divisionId) 
+  propertyTypes: PropertyTypeEntity[];
 }

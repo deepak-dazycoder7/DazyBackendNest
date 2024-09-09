@@ -16,6 +16,7 @@ import { PropertyEntity } from './domain/property/entity/property.entity';
 import { PropertyModule } from './domain/property/property.module';
 import { PropertyTypeEntity } from './domain/property/property-type/entity/property-type.entity';
 import { MultiLangModule } from './modules/common/multi-language/multi-lang.module';
+import { DivisionEntity } from './domain/property/division/entity/division.entity';
 
 @Module({
   imports: [
@@ -29,7 +30,7 @@ import { MultiLangModule } from './modules/common/multi-language/multi-lang.modu
       username: process.env.DATABASE_USER || 'root',
       password: process.env.DATABASE_PASSWORD || '',
       database: process.env.DATABASE_NAME || 'dazynestdb',
-      entities: [UserEntity, PropertyEntity, PropertyTypeEntity],
+      entities: [UserEntity, PropertyEntity, PropertyTypeEntity, DivisionEntity],
       synchronize: true,
       //logging: true,
     }),

@@ -24,7 +24,7 @@ export class UsersController {
   async createUser(@Body() createUserDto: CreateUserDto, @I18n() i18n : I18nContext): Promise<string> {
     try {
       const user = await this.usersService.createUser(createUserDto);
-      return this.ResponseService(i18n.t('message.success.create', {args: {entity :"User"}}), 200, user);
+      return this.ResponseService(i18n.t('message.success.create', {args: {entity :'User'}}), 200, user);
     } catch (error) {
       return this.ResponseService(error.message, 400, null);
     }

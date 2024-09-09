@@ -1,5 +1,4 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-import { PropertyTypeEntity } from '../property-type/entity/property-type.entity';
 import { Exclude } from 'class-transformer';
 
 @Entity('property')
@@ -18,12 +17,6 @@ export class PropertyEntity {
 
   @Column({ length: 255 })
   location: string;
-
-  @ManyToOne(() => PropertyTypeEntity, (propertyType) => propertyType.properties, {
-    onDelete: 'SET NULL', // or 'CASCADE' or 'RESTRICT' as per your needs
-    eager: true,
-  })
-  propertyType: PropertyTypeEntity;
 
   @Column({ default: true })
   isAvailable: boolean;

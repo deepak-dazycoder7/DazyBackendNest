@@ -1,6 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-import { Exclude } from 'class-transformer';
-import { PropertyEntity } from '../../entity/property.entity';  
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
 
 @Entity('property_types')
 export class PropertyTypeEntity {
@@ -8,7 +6,7 @@ export class PropertyTypeEntity {
   id: number;
 
   @Column({ unique: true })
-  name: string;
+  type_name: string;
 
   @Column({ default: true })
   status: boolean;
@@ -16,17 +14,12 @@ export class PropertyTypeEntity {
   @Column('text')
   description: string;
 
-  // One-to-Many relation with PropertyEntity
-  @OneToMany(() => PropertyEntity, (property) => property.propertyType)
-  properties: PropertyEntity[];
-
   @CreateDateColumn({
     type: 'timestamp',
     precision: 0,
     nullable: true,
     default: null,
   })
-  @Exclude()
   created_at: Date;
 
   @UpdateDateColumn({
@@ -36,6 +29,22 @@ export class PropertyTypeEntity {
     default: null,
     onUpdate: 'CURRENT_TIMESTAMP',
   })
-  @Exclude()
   updated_at: Date;
+
+  @DeleteDateColumn({
+    type: 'timestamp',
+    precision: 0,
+    nullable: true,
+    default: null,
+  })
+  deleted_at: Date;
+
+  @Column({ nullable: true })
+  created_by: number;
+
+  @Column({ nullable: true })
+  deleted_by: number;
+
+  @Column()
+  divisionId: number; //foreign key
 }
