@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Put, Param, Delete, Get, Inject, SetMetadata, UseGuards, UseInterceptors, UploadedFiles, BadRequestException } from '@nestjs/common';
+import { Body, Controller, Post, Put, Param, Delete, Get, Inject, SetMetadata, UseGuards, UseInterceptors, UploadedFiles, BadRequestException, Req } from '@nestjs/common';
 import { ParseFilePipe, MaxFileSizeValidator, FileTypeValidator } from '@nestjs/common';
 import { PropertyService } from './property.service';
 import { CreatePropertyDto } from 'src/domain/property/dtos/create.property.dto';
@@ -11,6 +11,7 @@ import { UploadFileDto } from 'src/domain/property/dtos/upload.file.dto';
 import { multerOptions } from './multer-config';
 import { FileFieldsInterceptor } from '@nestjs/platform-express/multer';
 import { I18n, I18nContext, I18nService } from 'nestjs-i18n';
+import { CustomRequest } from 'src/modules/common/interfaces/custom-request.interface';
 
 
 @Controller('property')
@@ -19,25 +20,26 @@ export class PropertyController {
   constructor(
     private readonly PropertyService: PropertyService,
     @Inject('CREATE_RESPONSE') private readonly ResponseService,
-    private readonly i18n : I18nService
-  ) {}
+    private readonly i18n: I18nService
+  ) { }
 
-  // Create Property
+  // Create
   @Post('create')
   @SetMetadata(CHECK_POLICIES_KEY, [new CreatePropertyHandler()])
-  async createProperty(@Body() createPropertyDto: CreatePropertyDto, @I18n() i18n: I18nContext): Promise<any> {
+  async createProperty(@Body() createPropertyDto: CreatePropertyDto, @I18n() i18n: I18nContext, @Req() req: CustomRequest): Promise<any> {
     try {
-      const Property = await this.PropertyService.createProperty(createPropertyDto);
+      const createdBy = req.user?.sub;
+      const Property = await this.PropertyService.createProperty(createPropertyDto, createdBy);
       return this.ResponseService(i18n.t('message.create_success.property'), 200, Property);
     } catch (error) {
       return this.ResponseService(error.message, 400, null);
     }
   }
 
-  // Update Property
+  // Update
   @Put('update/:id')
   @SetMetadata(CHECK_POLICIES_KEY, [new UpdatePropertyHandler()])
-  async updateProperty(@Param('id') id: number, @Body() updatePropertyDto: UpdatePropertyDto,  @I18n() i18n: I18nContext): Promise<any> {
+  async updateProperty(@Param('id') id: number, @Body() updatePropertyDto: UpdatePropertyDto, @I18n() i18n: I18nContext): Promise<any> {
     try {
       const Property = await this.PropertyService.updateProperty(id, updatePropertyDto);
       return this.ResponseService(i18n.t('message.update_success.property'), 200, Property);
@@ -46,22 +48,23 @@ export class PropertyController {
     }
   }
 
-  // Delete Property
+  // Delete
   @Delete('remove/:id')
   @SetMetadata(CHECK_POLICIES_KEY, [new DeletePropertyHandler()])
-  async deleteProperty(@Param('id') id: number, @I18n() i18n : I18nContext): Promise<any> {
+  async deleteProperty(@Param('id') id: number, @I18n() i18n: I18nContext, @Req() req: CustomRequest): Promise<any> {
     try {
-      await this.PropertyService.deleteProperty(id);
+      const deletedBy = req.user?.sub
+      await this.PropertyService.softDeletePropertyType(id, deletedBy);
       return this.ResponseService(i18n.t('message.delete_success.property'), 200, null);
     } catch (error) {
       return this.ResponseService(error.message, 400, null);
     }
   }
 
-  // Get/read Property by id
+  // Get/read
   @Get('/:id')
   @SetMetadata(CHECK_POLICIES_KEY, [new ReadPropertyHandler()])
-  async getOne(@Param('id') id: number, @I18n() i18n : I18nContext): Promise<any> {
+  async getOne(@Param('id') id: number, @I18n() i18n: I18nContext): Promise<any> {
     try {
       const Property = await this.PropertyService.getPropertyById(id);
       return this.ResponseService(i18n.t('message.fetch_success.property'), 200, Property);
@@ -70,7 +73,7 @@ export class PropertyController {
     }
   }
 
-  // Get all Propertys
+  // Get all
   @Get()
   @SetMetadata(CHECK_POLICIES_KEY, [new ReadPropertyHandler()])
   async getAll(@I18n() i18n: I18nContext): Promise<any> {
@@ -92,23 +95,23 @@ export class PropertyController {
         { name: 'videos', maxCount: 2 },
       ],
       multerOptions, // Optional if you have specific multer configurations
-      
+
     ),
-    
+
   )
   async uploadFiles(
     @Param('id') id: number,
     @Body() uploadFileDto: UploadFileDto,
     @UploadedFiles()
     files: { images?: Express.Multer.File[]; videos?: Express.Multer.File[] },
-    @I18n() i18n : I18nContext
+    @I18n() i18n: I18nContext
   ) {
     try {
       if (!files || (!files.images && !files.videos)) {
-        const errorMessage = this.i18n.t('message.upload_file.require', {lang: I18nContext.current().lang})
+        const errorMessage = this.i18n.t('message.upload_file.require', { lang: I18nContext.current().lang })
         throw new BadRequestException(errorMessage);
       }
-      
+
       // Validate image files (max size: 3 MB, file types: jpg, jpeg, png, gif)
       if (files.images) {
         for (const file of files.images) {
@@ -141,5 +144,5 @@ export class PropertyController {
     }
   }
 }
-  
+
 

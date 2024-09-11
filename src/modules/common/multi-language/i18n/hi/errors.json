@@ -1,7 +1,8 @@
 {
     "not_found": {
         "user": "उपयोगकर्ता नहीं मिला",
-        "property": "उत्पाद नहीं मिला"
+        "property": "उत्पाद नहीं मिला",
+        "division": "division नहीं मिला"
     },
     "password_not_match": "पासवर्ड मेल नहीं खाता"
 }

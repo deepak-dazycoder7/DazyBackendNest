@@ -5,20 +5,26 @@ import { DivisionRepository } from './repository/division.repository';
 import { CreateDivisionDto } from './dtos/create.division.dto';
 import { UpdateDivisionDto } from './dtos/update.division.dto';
 import { I18nContext, I18nService } from 'nestjs-i18n';
+import { DataSource } from 'typeorm';
 
 @Injectable()
 export class DivisionService {
     constructor(
         @InjectRepository(DivisionEntity)
         private readonly divisionRepository: DivisionRepository,
-        private readonly i18n: I18nService
+        private readonly i18n: I18nService,
+        private readonly dataSource : DataSource
     ) { }
 
     //create
-    async createDivision(dto: CreateDivisionDto): Promise<DivisionEntity> {
-        const division = await this.divisionRepository.create(dto);
-        return this.divisionRepository.save(division);
-    }
+    async createDivision(createDivisionDto: CreateDivisionDto, userId: number): Promise<DivisionEntity> {
+                const newDivision = this.divisionRepository.create({
+          ...createDivisionDto,
+          created_by: userId, 
+        });
+        return await this.divisionRepository.save(newDivision);
+      }
+    
 
     // Update
     async updateDivision(id: number, dto: UpdateDivisionDto): Promise<DivisionEntity> {
@@ -27,10 +33,16 @@ export class DivisionService {
     }
 
     // Delete
-    async deleteDivision(id: number): Promise<void> {
-        await this.divisionRepository.delete(id);
-
-    }
+    async softDeleteDivision(id: number, deleted_by: number): Promise<void> {
+        await this.dataSource
+          .getRepository(DivisionEntity)
+          .createQueryBuilder()
+          .update(DivisionEntity)
+          .set({ deleted_at: new Date(), deleted_by: deleted_by })  
+          .where("id = :id", { id })
+          .execute();
+      }
+    
     //find all
     async findAll(): Promise<DivisionEntity[]> {
         const division = await this.divisionRepository.find();

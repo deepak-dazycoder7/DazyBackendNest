@@ -2,7 +2,7 @@ import { IsString, IsEmpty } from 'class-validator';
 
 export class UploadFileDto {
   @IsString()
-  name: string;
+  property_file_name: string;
 
   @IsString()
   description: string;

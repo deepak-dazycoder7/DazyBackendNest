@@ -6,6 +6,7 @@ import { PropertyRepository } from 'src/domain/property/repository/property.repo
 import { UpdatePropertyDto } from 'src/domain/property/dtos/update.property.dto';
 import { UploadFileDto } from 'src/domain/property/dtos/upload.file.dto';
 import { I18nContext, I18nService } from 'nestjs-i18n';
+import { DataSource } from 'typeorm';
 
 
 @Injectable()
@@ -13,12 +14,13 @@ export class PropertyService {
     constructor(
         @InjectRepository(PropertyEntity)
         private readonly propertyRepository: PropertyRepository,
-        private readonly i18n: I18nService
+        private readonly i18n: I18nService,
+        private readonly datasource: DataSource
     ) { }
 
     // Create a new Property
-    async createProperty(createPropertyDto: CreatePropertyDto): Promise<PropertyEntity> {
-        const Property = this.propertyRepository.create(createPropertyDto);
+    async createProperty(createPropertyDto: CreatePropertyDto, userId: number): Promise<PropertyEntity> {
+        const Property = this.propertyRepository.create({...createPropertyDto, created_by: userId});
         return this.propertyRepository.save(Property);
     }
 
@@ -30,9 +32,15 @@ export class PropertyService {
     }
 
     // Delete a Property by ID
-    async deleteProperty(id: number): Promise<void> {
-        const Property = await this.propertyRepository.delete(id);
-    }
+    async softDeletePropertyType(id: number, deleted_by: number): Promise<void> {
+        await this.datasource
+          .getRepository(PropertyEntity)
+          .createQueryBuilder()
+          .update(PropertyEntity)
+          .set({ deleted_at: new Date(), deleted_by: deleted_by })  
+          .where("id = :id", { id })
+          .execute();
+      }
 
     // Get a Property by ID
     async getPropertyById(id: number): Promise<PropertyEntity> {
@@ -55,7 +63,7 @@ export class PropertyService {
     }
 
     //uploade files
-    async uploadFiles(id: number, uploadFileDto: UploadFileDto, files: { images?: Express.Multer.File[], videos?: Express.Multer.File[] }): Promise<PropertyEntity> {
+    async uploadFiles(id: number, uploadFileDto: UploadFileDto,  files: { images?: Express.Multer.File[], videos?: Express.Multer.File[] }): Promise<PropertyEntity> {
         const Property = await this.propertyRepository.findOne({ where: { id } });
         if (!Property) {
             const errorMessage = await this.i18n.t('errors.not_found.property', { lang: I18nContext.current().lang });
@@ -85,8 +93,8 @@ export class PropertyService {
         Property.videos = [...(Property.videos || []), ...savedVideos];
 
         // Update Property details if provided
-        if (uploadFileDto.name) {
-            Property.name = uploadFileDto.name;
+        if (uploadFileDto.property_file_name) {
+            Property.property_name = uploadFileDto.property_file_name;
         }
         if (uploadFileDto.description) {
             Property.description = uploadFileDto.description;

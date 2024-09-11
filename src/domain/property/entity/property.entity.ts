@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, UpdateDateColumn,DeleteDateColumn } from 'typeorm';
 import { Exclude } from 'class-transformer';
 
 @Entity('property')
@@ -7,7 +7,7 @@ export class PropertyEntity {
   id: number;
 
   @Column({ length: 255 })
-  name: string;
+  property_name: string;
 
   @Column('text')
   description: string;
@@ -69,4 +69,19 @@ export class PropertyEntity {
   })
   @Exclude()
   updated_at: Date;
+
+  @DeleteDateColumn({
+    type: 'timestamp',
+    precision: 0,
+    nullable: true,
+    default: null,
+  })
+  @Exclude()
+  deleted_at: Date;
+
+  @Column({ nullable: true })
+  created_by: number;
+
+  @Column({ nullable: true })
+  deleted_by: number;
 }

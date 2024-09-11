@@ -65,7 +65,7 @@ export class UsersController {
       return this.ResponseService(error.message, 400, null)
     }
   }
-
+//get all
   @Get()
   @SetMetadata(CHECK_POLICIES_KEY, [new ReadPolicyHandler()])
   async getAll(@I18n() i18n : I18nContext): Promise<string> {
