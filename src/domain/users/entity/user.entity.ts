@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
 import { Exclude } from 'class-transformer';
 
 @Entity('user')
@@ -43,6 +43,21 @@ export class UserEntity  {
   })
   @Exclude()
   updated_at: Date;
+
+  @DeleteDateColumn({
+    type: 'timestamp',
+    precision: 0,
+    nullable: true,
+    default: null,
+  })
+  @Exclude()
+  deleted_at: Date;
+
+  @Column({ nullable: true })
+  created_by: number;
+
+  @Column({ nullable: true })
+  deleted_by: number;
 
   @Column()
   avtar: string;

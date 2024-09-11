@@ -6,6 +6,7 @@ import { UserEntity } from 'src/domain/users/entity/user.entity';
 import { UserRepository } from './repository/user.repository';
 import { UpdateUserProfileDto } from './dtos/update.user.dto';
 import { I18nContext, I18nService } from 'nestjs-i18n';
+import { DataSource } from 'typeorm';
 
 @Injectable()
 export class UsersService {
@@ -13,14 +14,15 @@ export class UsersService {
     @InjectRepository(UserEntity)
     private readonly userRepository: UserRepository,
     private readonly i18n: I18nService,
+    private readonly datasource: DataSource
   ) {}
 
   //create 
-  async  createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
-    const newUser = this.userRepository.create(createUserDto);
+  async  createUser(createUserDto: CreateUserDto, userId: number): Promise<UserEntity> {
+    const newUser = this.userRepository.create({...createUserDto, created_by: userId});
     newUser.password = await bcrypt.hash(createUserDto.password, 10);
-    const savedUser = await this.userRepository.save(newUser);
-    return savedUser;
+    return await this.userRepository.save(newUser);
+  
   }
 
   //update 
@@ -30,8 +32,14 @@ export class UsersService {
   }
 
   //remove 
-  async removeUser(id: number): Promise<void> {
-    await this.userRepository.delete(id);
+  async softDeleteUser(id: number, deleted_by: number): Promise<void> {
+    await this.datasource
+      .getRepository(UserEntity)
+      .createQueryBuilder()
+      .update(UserEntity)
+      .set({ deleted_at: new Date(), deleted_by: deleted_by })  
+      .where("id = :id", { id })
+      .execute();
   }
 
   //read 

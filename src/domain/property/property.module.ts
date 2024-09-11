@@ -11,6 +11,7 @@ import { PropertyTypeEntity } from 'src/domain/property/property-type/entity/pro
 import { PropertyTypeService } from './property-type/property-type.service';
 import { PropertyTypeModule } from './property-type/property-type.module';
 import { DivisionModule } from './division/division.module';
+import { CategoryModule } from './category/category.module';
 
 
 @Module({
@@ -21,10 +22,11 @@ import { DivisionModule } from './division/division.module';
       serveRoot: '/uploads', // Serve files at /uploads endpoint
     }),
     DivisionModule,
-    PropertyTypeModule
+    PropertyTypeModule,
+    CategoryModule
   ],
   controllers: [PropertyController],
-  providers: [PropertyService, PropertyAbilityFactory, PropertyGuard, PropertyTypeService],
+  providers: [PropertyService, PropertyAbilityFactory, PropertyGuard, ],
   exports: [PropertyService, PropertyAbilityFactory]
 })
 export class PropertyModule { }
