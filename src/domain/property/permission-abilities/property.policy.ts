@@ -1,7 +1,7 @@
 import { AppAbility } from 'src/domain/property/permission-abilities/property-ability.factory';
-import { PropertyPolicyHandler } from 'src/modules/common/casl/policy.interface';
+import { PropertyPolicyHandler } from 'src/modules/common/interfaces/policy.interface';
 import { PropertyEntity } from 'src/domain/property/entity/property.entity';
-import { Action } from '../enums/action.enum';
+import { Action } from '../../../modules/common/enums/action.enum';
 
 export class CreatePropertyHandler implements PropertyPolicyHandler {
   handle(ability: AppAbility): boolean {

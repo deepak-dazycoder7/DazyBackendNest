@@ -2,7 +2,7 @@ import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from '@
 import { Reflector } from '@nestjs/core';
 import { PropertyAbilityFactory } from '../permission-abilities/property-ability.factory';
 import { CHECK_POLICIES_KEY } from 'src/modules/common/decorators/policies.decorator';
-import { PropertyPolicyHandler } from 'src/modules/common/casl/policy.interface';
+import { PropertyPolicyHandler } from 'src/modules/common/interfaces/policy.interface';
 import { IS_PUBLIC_KEY } from 'src/modules/common/decorators/publice.decorator';
 
 @Injectable()

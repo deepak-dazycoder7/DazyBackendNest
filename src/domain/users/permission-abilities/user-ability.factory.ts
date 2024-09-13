@@ -7,8 +7,8 @@ import {
   PureAbility,
 } from '@casl/ability';
 import { UserEntity } from 'src/domain/users/entity/user.entity';
-import { Action } from 'src/domain/property/enums/action.enum';
-import { Role } from 'src/domain/users/enums/role.enum';
+import { Action } from 'src/modules/common/enums/action.enum';
+import { Role } from 'src/modules/common/enums/role.enum';
 
 type Subjects = InferSubjects<typeof UserEntity> | 'all';
 export type AppAbility = PureAbility<[Action, Subjects]>;

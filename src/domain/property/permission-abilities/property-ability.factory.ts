@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PureAbility, AbilityBuilder, AbilityClass, ExtractSubjectType, InferSubjects } from '@casl/ability';
 import { PropertyEntity } from 'src/domain/Property/entity/property.entity';
-import { Action } from '../enums/action.enum';
-import { Role } from 'src/domain/users/enums/role.enum';
+import { Action } from '../../../modules/common/enums/action.enum';
+import { Role } from 'src/modules/common/enums/role.enum';
 
 export type Subjects = InferSubjects<typeof PropertyEntity> | 'all';
 export type AppAbility = PureAbility<[Action, Subjects]>;

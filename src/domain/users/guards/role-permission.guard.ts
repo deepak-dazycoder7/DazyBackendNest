@@ -2,7 +2,7 @@ import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from '@
 import { Reflector } from '@nestjs/core';
 import { UserAbilityFactory } from 'src/domain/users/permission-abilities/user-ability.factory';
 import { CHECK_POLICIES_KEY } from 'src/modules/common/decorators/policies.decorator';
-import { UserPolicyHandler } from 'src/modules/common/casl/policy.interface';
+import { UserPolicyHandler } from 'src/modules/common/interfaces/policy.interface';
 import { IS_PUBLIC_KEY } from 'src/modules/common/decorators/publice.decorator';
 
 @Injectable()
@@ -30,7 +30,7 @@ export class UserRoleGuard implements CanActivate {
     const hasAccess = policyHandlers.every(handler => handler.handle(ability));
 
     if (!hasAccess) {
-      throw new ForbiddenException('Only Admin Access');
+      throw new ForbiddenException();
     }
 
     return hasAccess;
