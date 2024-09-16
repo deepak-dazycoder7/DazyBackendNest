@@ -18,6 +18,8 @@ import { PropertyTypeEntity } from './domain/property/property-type/entity/prope
 import { MultiLangModule } from './modules/common/multi-language/multi-lang.module';
 import { DivisionEntity } from './domain/property/division/entity/division.entity';
 import { CategoryEntity } from './domain/property/category/entity/category.entity';
+import { CountryModule } from './domain/country/country.module';
+import { CountryEntity } from './domain/country/entity/country.entity';
 
 @Module({
   imports: [
@@ -31,16 +33,17 @@ import { CategoryEntity } from './domain/property/category/entity/category.entit
       username: process.env.DATABASE_USER || 'root',
       password: process.env.DATABASE_PASSWORD || '',
       database: process.env.DATABASE_NAME || 'dazynestdb',
-      entities: [UserEntity, PropertyEntity, PropertyTypeEntity, DivisionEntity, CategoryEntity],
+      entities: [UserEntity, PropertyEntity, PropertyTypeEntity, DivisionEntity, CategoryEntity, CountryEntity],
       synchronize: true,
       //logging: true,
     }),
-    
+
     AuthModule,
     UsersModule,
     MultiLangModule,
     CommonModule,
     PropertyModule,
+    CountryModule
   ],
   controllers: [],
   providers: [

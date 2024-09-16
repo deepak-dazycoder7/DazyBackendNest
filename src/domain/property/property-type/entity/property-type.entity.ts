@@ -1,5 +1,6 @@
 import { Exclude } from 'class-transformer';
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToMany } from 'typeorm';
+import { CategoryEntity } from '../../category/entity/category.entity';
 
 @Entity('property_types')
 export class PropertyTypeEntity {
@@ -51,4 +52,7 @@ export class PropertyTypeEntity {
 
   @Column()
   divisionId: number; //foreign key
+
+  @OneToMany(() => CategoryEntity, (category) => category.divisionId) 
+  category: CategoryEntity[];
 }

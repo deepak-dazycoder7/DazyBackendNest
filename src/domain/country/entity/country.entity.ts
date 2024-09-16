@@ -1,19 +1,16 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn,  } from "typeorm";
 import { Exclude } from "class-transformer";
 
-@Entity('category')
-export class CategoryEntity {
+@Entity('country')
+export class CountryEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ unique: true })
-  category_name: string;
+  country_name: string;
 
   @Column({ default: true })
   status: boolean;
-
-  @Column('text')
-  description: string;
 
   @CreateDateColumn({
     type: 'timestamp',
@@ -48,7 +45,4 @@ export class CategoryEntity {
 
   @Column({ nullable: true })
   deleted_by: number;
-
-  @Column()
-  divisionId: number; //foreign key
 }
