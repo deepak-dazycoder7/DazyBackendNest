@@ -1,14 +1,13 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToMany } from "typeorm";
 import { Exclude } from "class-transformer";
-import { StateEntity } from "../states/entity/state.entity";
 
-@Entity('country')
-export class CountryEntity {
+@Entity('city')
+export class CityEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ unique: true })
-  country_name: string;
+  city_name: string;
 
   @Column({ default: true })
   status: boolean;
@@ -47,6 +46,6 @@ export class CountryEntity {
   @Column({ nullable: true })
   deleted_by: number;
 
-  @OneToMany(() => StateEntity, (state) => state.divisionId) 
-  state: StateEntity[];
+  @Column()
+  divisionId: number; //foreign key
 }

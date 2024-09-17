@@ -20,6 +20,8 @@ import { DivisionEntity } from './domain/property/division/entity/division.entit
 import { CategoryEntity } from './domain/property/category/entity/category.entity';
 import { CountryModule } from './domain/country/country.module';
 import { CountryEntity } from './domain/country/entity/country.entity';
+import { StateEntity } from './domain/country/states/entity/state.entity';
+import { CityEntity } from './domain/country/city/entity/city.entity';
 
 @Module({
   imports: [
@@ -33,7 +35,7 @@ import { CountryEntity } from './domain/country/entity/country.entity';
       username: process.env.DATABASE_USER || 'root',
       password: process.env.DATABASE_PASSWORD || '',
       database: process.env.DATABASE_NAME || 'dazynestdb',
-      entities: [UserEntity, PropertyEntity, PropertyTypeEntity, DivisionEntity, CategoryEntity, CountryEntity],
+      entities: [UserEntity, PropertyEntity, PropertyTypeEntity, DivisionEntity, CategoryEntity, CountryEntity, StateEntity, CityEntity],
       synchronize: true,
       //logging: true,
     }),
