@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UnauthorizedException, Inject, UseGuards, Req, Get } from '@nestjs/common';
+import { Body, Controller, Post, UnauthorizedException, Inject, UseGuards, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignInDto } from './dto/auth.signIn.dto';
 import { Public } from 'src/modules/common/decorators/publice.decorator';
@@ -27,7 +27,7 @@ export class AuthController {
   }
 
   //sign out
-  @Get('signout')
+  @Post('sign-out')
   @UseGuards(AuthGuard('jwt'))
   async signOut(@Req() req, @I18n() i18n: I18nContext) {
     try {
@@ -38,5 +38,4 @@ export class AuthController {
       return this.ResponseService(error.message, 401, null);
     }
   }
-
 }

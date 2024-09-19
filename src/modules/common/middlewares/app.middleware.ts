@@ -7,7 +7,6 @@ export class LocaleMiddleware implements NestMiddleware {
     //const lang = req.headers['x-lang'] || 'en'; 
 //req['language'] = lang;
     console.log(`Request... ${req.method} ${req.originalUrl}`);
-    //console.log(lang)
     next();
   }
 }
