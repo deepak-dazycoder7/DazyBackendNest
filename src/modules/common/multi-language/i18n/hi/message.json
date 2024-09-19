@@ -1,4 +1,5 @@
 {
+  "signout_success": "साइन आउट सफल रहा!",
     "success": {
       "signin": "साइन इन सफल!",
       "create": "{ entity } सफलतापूर्वक बनाया गया!",

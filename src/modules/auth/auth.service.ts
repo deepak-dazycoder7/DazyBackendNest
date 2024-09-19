@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, Request } from '@nestjs/common';
 import { SignInDto } from './dto/auth.signIn.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -6,6 +6,7 @@ import { UserEntity } from 'src/domain/users/entity/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { I18nService, I18nContext } from 'nestjs-i18n';
+import { UsersService } from 'src/domain/users/users.service';
 
 
 
@@ -13,8 +14,9 @@ import { I18nService, I18nContext } from 'nestjs-i18n';
 export class AuthService {
   constructor(
     @InjectRepository(UserEntity)
-    private userRepository: Repository<UserEntity>,
-    private jwtService: JwtService,
+    private readonly userRepository: Repository<UserEntity>,
+    private readonly jwtService: JwtService,
+    private readonly userService : UsersService,
     private readonly i18n: I18nService,
   ) { }
 
@@ -36,16 +38,12 @@ export class AuthService {
   }
 
   //Sign Out
-  // async signOut(token: string): Promise<void> {
-  //   if (token) {
-  //     this.blacklistedTokens.add(token);
-  //   } else {
-  //     throw new Error('Token not found');
-  //   }
-  // }
-  // isTokenBlacklisted(token: string): boolean {
-  //   return this.blacklistedTokens.has(token);
-  // }
+  async getUserIdFromRequest(@Request() req): Promise<number> {
+    const user = req.user; 
+    return user.id; 
+  }
+  async signOut(userId: number): Promise<void> {
+  }
 
   //TOKEN generate
   async generateToken(user: UserEntity): Promise<string> {

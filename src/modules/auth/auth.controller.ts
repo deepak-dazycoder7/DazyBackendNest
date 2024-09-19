@@ -1,15 +1,16 @@
-import { Body, Controller, Post, UnauthorizedException, Inject, Req } from '@nestjs/common';
+import { Body, Controller, Post, UnauthorizedException, Inject, UseGuards, Req, Get } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignInDto } from './dto/auth.signIn.dto';
 import { Public } from 'src/modules/common/decorators/publice.decorator';
 import { I18n, I18nContext } from 'nestjs-i18n';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
-    @Inject('CREATE_RESPONSE') private readonly ResponseService 
-  ) {}
+    @Inject('CREATE_RESPONSE') private readonly ResponseService
+  ) { }
 
   @Post('sign-in')
   @Public()
@@ -26,15 +27,16 @@ export class AuthController {
   }
 
   //sign out
-  // @Post('signout')
-  // async signOut(@Req() req: Request): Promise<any> {
-  //   const token = req.headers.authorization?.split(' ')[1];
-  //   try {
-  //     await this.authService.signOut(token);
-  //     return this.returnResponse('Sing-Out Successfully', 201, null)
-  //   } catch (error) {
-  //     return this.returnResponse(error.message, 400, null);
-  //   }
-  // }
+  @Get('signout')
+  @UseGuards(AuthGuard('jwt'))
+  async signOut(@Req() req, @I18n() i18n: I18nContext) {
+    try {
+      const userId = await this.authService.getUserIdFromRequest(req);
+      await this.authService.signOut(userId);
+      return this.ResponseService(i18n.t('message.signout_success'), 200, null)
+    } catch (error) {
+      return this.ResponseService(error.message, 401, null);
+    }
+  }
 
 }
