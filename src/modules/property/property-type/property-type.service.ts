@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import { PropertyTypeEntity } from 'src/domain/property/property-type/entity/property-type.entity';
-import { PropertyTypeRepository } from 'src/domain/property/property-type/repository/property-type.repository';
-import { CreatePropertyTypeDto } from 'src/domain/property/property-type//dtos/create-propertyType.dto';
-import { UpdatePropertyTypeDto } from 'src/domain/property/property-type/dtos/update-propertyType.dto';
+import { PropertyTypeEntity } from 'src/modules/property/property-type/entity/property-type.entity';
+import { PropertyTypeRepository } from 'src/modules/property/property-type/repository/property-type.repository';
+import { CreatePropertyTypeDto } from 'src/modules/property/property-type//dtos/create-propertyType.dto';
+import { UpdatePropertyTypeDto } from 'src/modules/property/property-type/dtos/update-propertyType.dto';
 import { I18nContext, I18nService } from 'nestjs-i18n';
 
 @Injectable()

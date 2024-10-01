@@ -6,7 +6,7 @@ import {
   InferSubjects,
   PureAbility,
 } from '@casl/ability';
-import { UserEntity } from 'src/domain/users/entity/user.entity';
+import { UserEntity } from 'src/modules/users/entity/user.entity';
 import { Action } from 'src/modules/common/enums/action.enum';
 import { Role } from 'src/modules/common/enums/role.enum';
 

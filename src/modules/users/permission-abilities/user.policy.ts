@@ -1,6 +1,6 @@
-import { AppAbility } from 'src/domain/users/permission-abilities/user-ability.factory';
+import { AppAbility } from 'src/modules/users/permission-abilities/user-ability.factory';
 import { UserPolicyHandler } from 'src/modules/common/interfaces/policy.interface';
-import { UserEntity } from 'src/domain/users/entity/user.entity';
+import { UserEntity } from 'src/modules/users/entity/user.entity';
 import { Action } from 'src/modules/common/enums/action.enum';
 
 export class CreatePolicyHandler implements UserPolicyHandler {

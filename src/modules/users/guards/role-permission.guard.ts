@@ -1,6 +1,6 @@
 import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { UserAbilityFactory } from 'src/domain/users/permission-abilities/user-ability.factory';
+import { UserAbilityFactory } from 'src/modules/users/permission-abilities/user-ability.factory';
 import { CHECK_POLICIES_KEY } from 'src/modules/common/decorators/policies.decorator';
 import { UserPolicyHandler } from 'src/modules/common/interfaces/policy.interface';
 import { IS_PUBLIC_KEY } from 'src/modules/common/decorators/publice.decorator';

@@ -1,14 +1,13 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToMany } from "typeorm";
-import { PropertyTypeEntity } from "../../property-type/entity/property-type.entity";
-import { Exclude } from "class-transformer";
+import { Exclude } from 'class-transformer';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
 
-@Entity('division')
-export class DivisionEntity {
+@Entity('property_types')
+export class PropertyTypeEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ unique: true })
-  division_name: string;
+  type_name: string;
 
   @Column({ default: true })
   status: boolean;
@@ -50,6 +49,5 @@ export class DivisionEntity {
   @Column({ nullable: true })
   deleted_by: number;
 
-  @OneToMany(() => PropertyTypeEntity, (propertyType) => propertyType.divisionId) 
-  propertyTypes: PropertyTypeEntity[];
+
 }

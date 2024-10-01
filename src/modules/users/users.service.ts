@@ -2,7 +2,7 @@ import { NotFoundException, Injectable} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from './dtos/create.user.dto';
 import * as bcrypt from 'bcrypt';
-import { UserEntity } from 'src/domain/users/entity/user.entity';
+import { UserEntity } from './entity/user.entity';
 import { UserRepository } from './repository/user.repository';
 import { UpdateUserProfileDto } from './dtos/update.user.dto';
 import { I18nContext, I18nService } from 'nestjs-i18n';

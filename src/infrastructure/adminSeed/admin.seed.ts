@@ -1,7 +1,7 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm'; 
-import { UserEntity } from 'src/domain/users/entity/user.entity'; 
+import { UserEntity } from '../../modules/users/entity/user.entity';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()

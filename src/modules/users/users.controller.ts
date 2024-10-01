@@ -4,7 +4,7 @@ import { CreateUserDto } from './dtos/create.user.dto';
 import { UpdateUserProfileDto } from './dtos/update.user.dto';
 import { SetMetadata } from '@nestjs/common';
 import { CHECK_POLICIES_KEY } from 'src/modules/common/decorators/policies.decorator';
-import { CreatePolicyHandler, DeletePolicyHandler, ReadPolicyHandler, UpdatePolicyHandler } from 'src/domain/users/permission-abilities/user.policy';
+import { CreatePolicyHandler, DeletePolicyHandler, ReadPolicyHandler, UpdatePolicyHandler } from 'src/modules/users/permission-abilities/user.policy';
 import { UserRoleGuard } from './guards/role-permission.guard';
 import { JwtAuthGuard } from 'src/modules/common/guards/jwt.auth.guard';
 import { I18nContext, I18n } from 'nestjs-i18n';

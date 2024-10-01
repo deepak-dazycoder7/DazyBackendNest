@@ -1,27 +1,27 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AuthModule } from 'src/modules/auth/auth.module';
-import { UsersModule } from 'src/domain/users/users.module';
+import { UsersModule } from './modules/users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CommonModule } from './modules/common/common.module';
-import { UserEntity } from './domain/users/entity/user.entity';
+import { UserEntity } from './modules/users/entity/user.entity';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { HttpExceptionFilter } from 'src/modules/common/exceptionFilter/http-exception.filter';
 import { JwtAuthGuard } from 'src/modules/common/guards/jwt.auth.guard';
 import { LocaleMiddleware } from './modules/common/middlewares/app.middleware';
-import { UserSeeder } from './domain/adminSeed/admin.seed';
+import { UserSeeder } from './infrastructure/adminSeed/admin.seed';
 import { JwtStrategy } from './modules/common/jwtstrategy/jwt.strategy';
-import { UserAbilityFactory } from './domain/users/permission-abilities/user-ability.factory';
-import { PropertyEntity } from './domain/property/entity/property.entity';
-import { PropertyModule } from './domain/property/property.module';
-import { PropertyTypeEntity } from './domain/property/property-type/entity/property-type.entity';
+import { UserAbilityFactory } from './modules/users/permission-abilities/user-ability.factory';
+import { PropertyEntity } from './modules/property/entity/property.entity';
+import { PropertyModule } from './modules/property/property.module';
+import { PropertyTypeEntity } from './modules/property/property-type/entity/property-type.entity';
 import { MultiLangModule } from './modules/common/multi-language/multi-lang.module';
-import { DivisionEntity } from './domain/property/division/entity/division.entity';
-import { CategoryEntity } from './domain/property/category/entity/category.entity';
-import { CountryModule } from './domain/country/country.module';
-import { CountryEntity } from './domain/country/entity/country.entity';
-import { StateEntity } from './domain/country/states/entity/state.entity';
-import { CityEntity } from './domain/country/city/entity/city.entity';
+import { DivisionEntity } from './modules/property/division/entity/division.entity';
+import { CategoryEntity } from './modules/property/category/entity/category.entity';
+import { CountryModule } from './modules/country/country.module';
+import { CountryEntity } from './modules/country/entity/country.entity';
+import { StateEntity } from './modules/country/states/entity/state.entity';
+import { CityEntity } from './modules/country/city/entity/city.entity';
 
 @Module({
   imports: [

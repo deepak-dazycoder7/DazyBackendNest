@@ -1,10 +1,10 @@
 import { NotFoundException, Injectable, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreatePropertyDto } from 'src/domain/property/dtos/create.property.dto';
-import { PropertyEntity } from 'src/domain/property/entity/property.entity';
-import { PropertyRepository } from 'src/domain/property/repository/property.repository';
-import { UpdatePropertyDto } from 'src/domain/property/dtos/update.property.dto';
-import { UploadFileDto } from 'src/domain/property/dtos/upload.file.dto';
+import { CreatePropertyDto } from 'src/modules/property/dtos/create.property.dto';
+import { PropertyEntity } from 'src/modules/property/entity/property.entity';
+import { PropertyRepository } from 'src/modules/property/repository/property.repository';
+import { UpdatePropertyDto } from 'src/modules/property/dtos/update.property.dto';
+import { UploadFileDto } from 'src/modules/property/dtos/upload.file.dto';
 import { I18nContext, I18nService } from 'nestjs-i18n';
 import { DataSource } from 'typeorm';
 

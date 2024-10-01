@@ -2,11 +2,11 @@ import { Injectable, UnauthorizedException, Request } from '@nestjs/common';
 import { SignInDto } from './dto/auth.signIn.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UserEntity } from 'src/domain/users/entity/user.entity';
+import { UserEntity } from 'src/modules/users/entity/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { I18nService, I18nContext } from 'nestjs-i18n';
-import { UsersService } from 'src/domain/users/users.service';
+import { UsersService } from 'src/modules/users/users.service';
 
 
 

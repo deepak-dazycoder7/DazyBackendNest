@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import * as path from 'path';
 import { I18nModule, AcceptLanguageResolver, QueryResolver, HeaderResolver, I18nService, I18N_TRANSLATIONS } from 'nestjs-i18n';
-import { UsersController } from 'src/domain/users/users.controller';
-import { UsersService } from 'src/domain/users/users.service';
-import { UsersModule } from 'src/domain/users/users.module';
+import { UsersController } from 'src/modules/users/users.controller';
+import { UsersService } from 'src/modules/users/users.service';
+import { UsersModule } from 'src/modules/users/users.module';
 
 @Module({
   imports: [

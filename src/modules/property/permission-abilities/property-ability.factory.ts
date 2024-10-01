@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PureAbility, AbilityBuilder, AbilityClass, ExtractSubjectType, InferSubjects } from '@casl/ability';
-import { PropertyEntity } from 'src/domain/Property/entity/property.entity';
+import { PropertyEntity } from 'src/modules/Property/entity/property.entity';
 import { Action } from '../../../modules/common/enums/action.enum';
 import { Role } from 'src/modules/common/enums/role.enum';
 

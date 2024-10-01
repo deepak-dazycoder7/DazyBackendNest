@@ -1,13 +1,13 @@
 import { Body, Controller, Post, Put, Param, Delete, Get, Inject, SetMetadata, UseGuards, UseInterceptors, UploadedFiles, BadRequestException, Req } from '@nestjs/common';
 import { ParseFilePipe, MaxFileSizeValidator, FileTypeValidator } from '@nestjs/common';
 import { PropertyService } from './property.service';
-import { CreatePropertyDto } from 'src/domain/property/dtos/create.property.dto';
-import { UpdatePropertyDto } from 'src/domain/property/dtos/update.property.dto';
+import { CreatePropertyDto } from 'src/modules/property/dtos/create.property.dto';
+import { UpdatePropertyDto } from 'src/modules/property/dtos/update.property.dto';
 import { CHECK_POLICIES_KEY } from 'src/modules/common/decorators/policies.decorator';
-import { CreatePropertyHandler, UpdatePropertyHandler, DeletePropertyHandler, ReadPropertyHandler, UploadFileHandler } from 'src/domain/property/permission-abilities/property.policy';
+import { CreatePropertyHandler, UpdatePropertyHandler, DeletePropertyHandler, ReadPropertyHandler, UploadFileHandler } from 'src/modules/property/permission-abilities/property.policy';
 import { JwtAuthGuard } from 'src/modules/common/guards/jwt.auth.guard';
 import { PropertyGuard } from './guards/permission.guard';
-import { UploadFileDto } from 'src/domain/property/dtos/upload.file.dto';
+import { UploadFileDto } from 'src/modules/property/dtos/upload.file.dto';
 import { multerOptions } from './multer-config';
 import { FileFieldsInterceptor } from '@nestjs/platform-express/multer';
 import { I18n, I18nContext, I18nService } from 'nestjs-i18n';

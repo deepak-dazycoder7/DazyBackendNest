@@ -1,11 +1,11 @@
-import { AppAbility as UserAppAbility } from 'src/domain/users/permission-abilities/user-ability.factory';
-import { AppAbility as PropertyAppAbility } from 'src/domain/property/permission-abilities/property-ability.factory';
-import { CategoryAppAbility as CategoryAbilityFactory } from 'src/domain/property/category/permission-abilities/category.ability.factory'
-import { DivsionAppAbility as DivisionAbilityFactory } from 'src/domain/property/division/permission-abilities/division.ability.factory';
-import { PropertyTypeAppAbility as PropertyTypeAbilityFactory } from 'src/domain/property/property-type/permission-abilities/propertytype.ability.factory';
-import { CountryAppAbility as CountryAbilityFactory } from 'src/domain/country/permission-abilities/country.ability.factory';
-import { StateAppAbility as StateAbilityFactory } from 'src/domain/country/states/permission-abilities/state.ability.factory';
-import { CityAppAbility as CityAbilityFactory } from 'src/domain/country/city/permission-ability/city.abiity.factory';
+import { AppAbility as UserAppAbility } from 'src/modules/users/permission-abilities/user-ability.factory';
+import { AppAbility as PropertyAppAbility } from 'src/modules/property/permission-abilities/property-ability.factory';
+import { CategoryAppAbility as CategoryAbilityFactory } from 'src/modules/property/category/permission-abilities/category.ability.factory'
+import { DivsionAppAbility as DivisionAbilityFactory } from 'src/modules/property/division/permission-abilities/division.ability.factory';
+import { PropertyTypeAppAbility as PropertyTypeAbilityFactory } from 'src/modules/property/property-type/permission-abilities/propertytype.ability.factory';
+import { CountryAppAbility as CountryAbilityFactory } from 'src/modules/country/permission-abilities/country.ability.factory';
+import { StateAppAbility as StateAbilityFactory } from 'src/modules/country/states/permission-abilities/state.ability.factory';
+import { CityAppAbility as CityAbilityFactory } from 'src/modules/country/city/permission-ability/city.abiity.factory';
 
 export interface UserPolicyHandler {
   handle(ability: UserAppAbility): boolean;
