@@ -8,7 +8,7 @@ import { UpdatePropertyTypeDto } from 'src/modules/property/property-type/dtos/u
 import { I18nContext, I18nService } from 'nestjs-i18n';
 
 @Injectable()
-export class PropertyTypeService {
+export class TypeService {
   constructor(
     @InjectRepository(PropertyTypeEntity)
     private readonly propertyTypeRepository: PropertyTypeRepository,

@@ -6,9 +6,6 @@ import { UserEntity } from 'src/modules/users/entity/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { I18nService, I18nContext } from 'nestjs-i18n';
-import { UsersService } from 'src/modules/users/users.service';
-
-
 
 @Injectable()
 export class AuthService {
@@ -16,7 +13,6 @@ export class AuthService {
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
     private readonly jwtService: JwtService,
-    private readonly userService : UsersService,
     private readonly i18n: I18nService,
   ) { }
 

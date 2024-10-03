@@ -14,7 +14,7 @@ import { I18n, I18nContext, I18nService } from 'nestjs-i18n';
 import { CustomRequest } from 'src/modules/common/interfaces/custom-request.interface';
 
 
-@Controller('property')
+@Controller()
 @UseGuards(PropertyGuard, JwtAuthGuard)
 export class PropertyController {
   constructor(
@@ -24,7 +24,7 @@ export class PropertyController {
   ) { }
 
   // Create
-  @Post('create')
+  @Post()
   @SetMetadata(CHECK_POLICIES_KEY, [new CreatePropertyHandler()])
   async createProperty(@Body() createPropertyDto: CreatePropertyDto, @I18n() i18n: I18nContext, @Req() req: CustomRequest): Promise<any> {
     try {
@@ -37,7 +37,7 @@ export class PropertyController {
   }
 
   // Update
-  @Put('update/:id')
+  @Put(':id')
   @SetMetadata(CHECK_POLICIES_KEY, [new UpdatePropertyHandler()])
   async updateProperty(@Param('id') id: number, @Body() updatePropertyDto: UpdatePropertyDto, @I18n() i18n: I18nContext): Promise<any> {
     try {
@@ -49,7 +49,7 @@ export class PropertyController {
   }
 
   // Delete
-  @Delete('remove/:id')
+  @Delete(':id')
   @SetMetadata(CHECK_POLICIES_KEY, [new DeletePropertyHandler()])
   async deleteProperty(@Param('id') id: number, @I18n() i18n: I18nContext, @Req() req: CustomRequest): Promise<any> {
     try {
@@ -62,7 +62,7 @@ export class PropertyController {
   }
 
   // Get/read
-  @Get('/:id')
+  @Get(':id')
   @SetMetadata(CHECK_POLICIES_KEY, [new ReadPropertyHandler()])
   async getOne(@Param('id') id: number, @I18n() i18n: I18nContext): Promise<any> {
     try {
@@ -137,8 +137,8 @@ export class PropertyController {
       }
 
       // Call the service to handle the files
-      const PropertyFile = await this.PropertyService.uploadFiles(id, uploadFileDto, files);
-      return this.ResponseService(i18n.t('message.upload_file.success'), 200, PropertyFile);
+     // const PropertyFile = await this.PropertyService.uploadFiles(id, uploadFileDto, files);
+     // return this.ResponseService(i18n.t('message.upload_file.success'), 200, PropertyFile);
     } catch (error) {
       return this.ResponseService(error.message, 400, null);
     }

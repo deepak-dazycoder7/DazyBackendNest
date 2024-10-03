@@ -1,7 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, UpdateDateColumn,DeleteDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn,  CreateDateColumn, UpdateDateColumn,DeleteDateColumn } from 'typeorm';
 import { Exclude } from 'class-transformer';
 
-@Entity('property')
+@Entity('property-table')
 export class PropertyEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -24,12 +24,6 @@ export class PropertyEntity {
   @Column({ type: 'simple-array', nullable: true })
   amenities: string[];
 
-  @Column({ type: 'date', nullable: true })
-  availableFrom: Date;
-
-  @Column({ type: 'date', nullable: true })
-  availableTo: Date;
-
   @Column({ length: 255 })
   street: string;
 
@@ -44,12 +38,6 @@ export class PropertyEntity {
 
   @Column({ length: 100 })
   country: string;
-
-  @Column('simple-array', { nullable: true })
-  images: string[];
-
-  @Column('simple-array', { nullable: true })
-  videos: string[];
 
   @CreateDateColumn({
     type: 'timestamp',

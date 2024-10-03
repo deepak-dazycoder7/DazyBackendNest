@@ -1,13 +1,13 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn,  } from "typeorm";
-import { Exclude } from "class-transformer";
+import { Exclude } from 'class-transformer';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
 
-@Entity('category')
-export class CategoryEntity {
+@Entity('sub-category')
+export class SubCategoryEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ unique: true })
-  category_name: string;
+  sub_category_name: string;
 
   @Column({ default: true })
   status: boolean;

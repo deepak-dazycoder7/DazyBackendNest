@@ -79,7 +79,7 @@ export class CategoryController {
     }
 
     //Get all
-    @Get('all')
+    @Get()
     @SetMetadata(CHECK_POLICIES_KEY, [new ReadCategoryHandler()])
     async getAll(@I18n() i18n: I18nContext): Promise<string> {
         try {

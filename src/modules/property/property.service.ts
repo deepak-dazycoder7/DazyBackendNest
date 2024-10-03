@@ -63,44 +63,44 @@ export class PropertyService {
     }
 
     //uploade files
-    async uploadFiles(id: number, uploadFileDto: UploadFileDto,  files: { images?: Express.Multer.File[], videos?: Express.Multer.File[] }): Promise<PropertyEntity> {
-        const Property = await this.propertyRepository.findOne({ where: { id } });
-        if (!Property) {
-            const errorMessage = await this.i18n.t('errors.not_found.property', { lang: I18nContext.current().lang });
-            throw new NotFoundException(errorMessage);
-        }
+    // async uploadFiles(id: number, uploadFileDto: UploadFileDto,  files: { images?: Express.Multer.File[], videos?: Express.Multer.File[] }): Promise<PropertyEntity> {
+    //     const Property = await this.propertyRepository.findOne({ where: { id } });
+    //     if (!Property) {
+    //         const errorMessage = await this.i18n.t('errors.not_found.property', { lang: I18nContext.current().lang });
+    //         throw new NotFoundException(errorMessage);
+    //     }
 
-        // Save image files 
-        const savedImages = [];
-        if (files.images) {
-            for (const file of files.images) {
-                const filePath = file.path; // Get the file path
-                savedImages.push(filePath); // Use the file path
-            }
-        }
+    //     // Save image files 
+    //     const savedImages = [];
+    //     if (files.images) {
+    //         for (const file of files.images) {
+    //             const filePath = file.path; // Get the file path
+    //             savedImages.push(filePath); // Use the file path
+    //         }
+    //     }
 
-        // Save video files 
-        const savedVideos = [];
-        if (files.videos) {
-            for (const file of files.videos) {
-                const filePath = file.path; // Get the file path
-                savedVideos.push(filePath); // Use the file path
-            }
-        }
+    //     // Save video files 
+    //     const savedVideos = [];
+    //     if (files.videos) {
+    //         for (const file of files.videos) {
+    //             const filePath = file.path; // Get the file path
+    //             savedVideos.push(filePath); // Use the file path
+    //         }
+    //     }
 
-        // Update Property with file paths
-        Property.images = [...(Property.images || []), ...savedImages];
-        Property.videos = [...(Property.videos || []), ...savedVideos];
+    //     // Update Property with file paths
+    //     Property.images = [...(Property.images || []), ...savedImages];
+    //     Property.videos = [...(Property.videos || []), ...savedVideos];
 
-        // Update Property details if provided
-        if (uploadFileDto.property_file_name) {
-            Property.property_name = uploadFileDto.property_file_name;
-        }
-        if (uploadFileDto.description) {
-            Property.description = uploadFileDto.description;
-        }
+    //     // Update Property details if provided
+    //     if (uploadFileDto.property_file_name) {
+    //         Property.property_name = uploadFileDto.property_file_name;
+    //     }
+    //     if (uploadFileDto.description) {
+    //         Property.description = uploadFileDto.description;
+    //     }
 
-        // Save the updated Property entity
-        return this.propertyRepository.save(Property);
-    }
+    //     // Save the updated Property entity
+    //     return this.propertyRepository.save(Property);
+    // }
 }   

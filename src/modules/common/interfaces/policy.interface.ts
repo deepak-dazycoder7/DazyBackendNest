@@ -6,6 +6,7 @@ import { PropertyTypeAppAbility as PropertyTypeAbilityFactory } from 'src/module
 import { CountryAppAbility as CountryAbilityFactory } from 'src/modules/country/permission-abilities/country.ability.factory';
 import { StateAppAbility as StateAbilityFactory } from 'src/modules/country/states/permission-abilities/state.ability.factory';
 import { CityAppAbility as CityAbilityFactory } from 'src/modules/country/city/permission-ability/city.abiity.factory';
+import { SubCategoryAppAbility as SubCategoryAbilityFactory } from 'src/modules/property/sub-category/permission-abilities/subcategory.ability.factory';
 
 export interface UserPolicyHandler {
   handle(ability: UserAppAbility): boolean;
@@ -39,6 +40,10 @@ export interface CityPolicyHandler {
   handle(ability: CityAbilityFactory): boolean;
 }
 
+export interface SubCategoryPolicyHandler {
+  handle(ability: SubCategoryAbilityFactory): boolean;
+}
+
 export type UserPolicyHandlerCallback = (ability: UserAppAbility) => boolean;
 export type PropertyPolicyHandlerCallback = (ability: PropertyAppAbility) => boolean;
 export type CategoryPolicyHandlerCallback = (ability: CategoryAbilityFactory) => boolean;
@@ -47,3 +52,4 @@ export type PropertyTypePolicyHandlerCallback = (ability: DivisionAbilityFactory
 export type CountryPolicyHandlerCallback = (ability: CountryAbilityFactory) => boolean;
 export type StatePolicyHandlerCallback = (ability: StateAbilityFactory) => boolean;
 export type CityPolicyHandlerCallback = (ability: CityAbilityFactory) => boolean;
+export type SubCategoryHandlerCallback = (ability: SubCategoryAbilityFactory) => boolean;

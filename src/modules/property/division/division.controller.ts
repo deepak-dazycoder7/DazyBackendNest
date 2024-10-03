@@ -8,7 +8,7 @@ import { DivisionGuard } from './guard/division.guard';
 import { CHECK_POLICIES_KEY } from 'src/modules/common/decorators/policies.decorator';
 import { CreateDivisionHandler, DeleteDivisionHandler, ReadDivisionHandler, UpdateDivisionHandler } from './permission-abilities/division.policy';
 
-@Controller('property/division')
+@Controller()
 @UseGuards(DivisionGuard)
 export class DivisionController {
     constructor(
@@ -17,7 +17,7 @@ export class DivisionController {
     ) { }
 
     //create 
-    @Post('create')
+    @Post()
     @SetMetadata(CHECK_POLICIES_KEY, [new CreateDivisionHandler()])
     async createDivision(@Body() dto: CreateDivisionDto, @I18n() i18n: I18nContext, @Req() req: CustomRequest): Promise<string> {
         try {
@@ -33,7 +33,7 @@ export class DivisionController {
     }
 
     //update 
-    @Put('/:id')
+    @Put(':id')
     @SetMetadata(CHECK_POLICIES_KEY, [new UpdateDivisionHandler()])
     async updateDivision(@Param('id') id: number, @Body() dto: UpdateDivisionDto, @I18n() i18n: I18nContext): Promise<string> {
         try {
@@ -45,7 +45,7 @@ export class DivisionController {
     }
 
     // delete 
-    @Delete('remove/:id')
+    @Delete(':id')
     @SetMetadata(CHECK_POLICIES_KEY, [new DeleteDivisionHandler()])
     async removeDivision(
         @Param('id',) id: number,
@@ -67,7 +67,7 @@ export class DivisionController {
 
 
     // Get/read 
-    @Get('/:id')
+    @Get(':id')
     @SetMetadata(CHECK_POLICIES_KEY, [new ReadDivisionHandler()])
     async getOne(@Param('id') id: number, @I18n() i18n: I18nContext): Promise<string> {
         try {

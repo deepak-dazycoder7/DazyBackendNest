@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Param, Inject, Delete, Req, Put, UseGuards, SetMetadata } from '@nestjs/common';
-import { PropertyTypeService } from './property-type.service';
+import { TypeService } from './property-type.service';
 import { CreatePropertyTypeDto } from './dtos/create-propertyType.dto';
 import { UpdatePropertyTypeDto } from './dtos/update-propertyType.dto';
 import { PropertyTypeEntity } from './entity/property-type.entity';
@@ -9,11 +9,11 @@ import { PropertyTypeGuard } from './guard/property-type.guard';
 import { CHECK_POLICIES_KEY } from 'src/modules/common/decorators/policies.decorator';
 import { CreatePropertyTypeHandler, DeletePropertyTypeHandler, ReadPropertyTypeHandler, UpdatePropertyTypeHandler } from './permission-abilities/property.type.policy';
 
-@Controller('property/types')
+@Controller('type')
 @UseGuards(PropertyTypeGuard)
-export class PropertyTypeController {
+export class TypeController {
   constructor(
-    private readonly propertyTypeService: PropertyTypeService,
+    private readonly propertyTypeService: TypeService,
     @Inject('CREATE_RESPONSE') private readonly ResponseService,
   ) { }
 

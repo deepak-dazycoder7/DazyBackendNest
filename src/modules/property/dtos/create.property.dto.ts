@@ -12,16 +12,12 @@ export class CreatePropertyDto {
   description: string;
 
   @IsNotEmpty({ message: i18nValidationMessage('validation.isNotEmpty') })
-  @IsNumber({},{ message: i18nValidationMessage('validation.isNumber') })
+  @IsNumber({}, { message: i18nValidationMessage('validation.isNumber') })
   price: number;
 
   @IsString({ message: i18nValidationMessage('validation.isString') })
   @IsNotEmpty({ message: i18nValidationMessage('validation.isNotEmpty') })
   location: string;
-
-  @IsNotEmpty({ message: i18nValidationMessage('validation.isNotEmpty') })
-  @IsNumber({},{ message: i18nValidationMessage('validation.isNumber') })
-  propertyTypeId: number; 
 
   @IsBoolean()
   @IsOptional()
@@ -30,16 +26,6 @@ export class CreatePropertyDto {
   @IsArray()
   @IsOptional()
   amenities?: string[];
-
-  @IsOptional()
-  @IsDate()
-  @Type(() => Date)  // Ensure date is converted correctly
-  availableFrom?: Date;
-
-  @IsOptional()
-  @IsDate()
-  @Type(() => Date)  // Ensure date is converted correctly
-  availableTo?: Date;
 
   // Address fields
   @IsString({ message: i18nValidationMessage('validation.isString') })

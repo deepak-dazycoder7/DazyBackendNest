@@ -49,5 +49,4 @@ export class PropertyTypeEntity {
   @Column({ nullable: true })
   deleted_by: number;
 
-
 }
