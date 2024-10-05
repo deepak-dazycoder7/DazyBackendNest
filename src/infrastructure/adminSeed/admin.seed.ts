@@ -1,6 +1,6 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm'; 
+import { Repository } from 'typeorm';
 import { UserEntity } from '../../modules/users/entity/user.entity';
 import * as bcrypt from 'bcrypt';
 
@@ -9,7 +9,7 @@ export class UserSeeder implements OnModuleInit {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
-  ) {}
+  ) { }
 
   async onModuleInit() {
     console.log('UserSeeder is running...');

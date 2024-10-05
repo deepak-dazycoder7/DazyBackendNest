@@ -9,7 +9,7 @@ import { CHECK_POLICIES_KEY } from 'src/modules/common/decorators/policies.decor
 import { CreateStateHandler, UpdateStateHandler, DeleteStateHandler, ReadStateHandler } from './permission-abilities/state.policy';
 import { StateGuard } from './guard/state.guard';
 
-@Controller('state')
+@Controller()
 @UseGuards(StateGuard)
 export class StateController {
     constructor(
@@ -18,7 +18,7 @@ export class StateController {
     ) { }
 
     //create
-    @Post('create')
+    @Post()
     @SetMetadata(CHECK_POLICIES_KEY, [new CreateStateHandler()])
     async createState(@Body() Dto: CreateStateDto, @I18n() i18n: I18nContext, @Req() req: CustomRequest): Promise<string> {
         try {
@@ -31,7 +31,7 @@ export class StateController {
     }
 
     //update
-    @Put('/:id')
+    @Put(':id')
     @SetMetadata(CHECK_POLICIES_KEY, [new UpdateStateHandler()])
     async updateState(@Param('id') id: number, @Body() Dto: UpdateStateDto, @I18n() i18n: I18nContext): Promise<string> {
         try {
@@ -43,7 +43,7 @@ export class StateController {
     }
 
     // delete 
-    @Delete('remove/:id')
+    @Delete(':id')
     @SetMetadata(CHECK_POLICIES_KEY, [new DeleteStateHandler()])
     async removeState(@Param('id') id: number, @I18n() i18n: I18nContext, @Req() req: CustomRequest): Promise<string> {
         try {
@@ -56,7 +56,7 @@ export class StateController {
     }
 
     // Get/read
-    @Get('/:id')
+    @Get(':id')
     @SetMetadata(CHECK_POLICIES_KEY, [new ReadStateHandler()])
     async getOneState(@Param('id') id: number, @I18n() i18n: I18nContext): Promise<string> {
         try {

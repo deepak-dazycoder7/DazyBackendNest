@@ -86,63 +86,63 @@ export class PropertyController {
   }
 
   //Property file uploades
-  @Post('upload/:id')
-  @SetMetadata(CHECK_POLICIES_KEY, [new UploadFileHandler()])
-  @UseInterceptors(
-    FileFieldsInterceptor(
-      [
-        { name: 'images', maxCount: 5 },
-        { name: 'videos', maxCount: 2 },
-      ],
-      multerOptions, // Optional if you have specific multer configurations
+//   @Post('upload/:id')
+//   @SetMetadata(CHECK_POLICIES_KEY, [new UploadFileHandler()])
+//   @UseInterceptors(
+//     FileFieldsInterceptor(
+//       [
+//         { name: 'images', maxCount: 5 },
+//         { name: 'videos', maxCount: 2 },
+//       ],
+//       multerOptions, // Optional if you have specific multer configurations
 
-    ),
+//     ),
 
-  )
-  async uploadFiles(
-    @Param('id') id: number,
-    @Body() uploadFileDto: UploadFileDto,
-    @UploadedFiles()
-    files: { images?: Express.Multer.File[]; videos?: Express.Multer.File[] },
-    @I18n() i18n: I18nContext
-  ) {
-    try {
-      if (!files || (!files.images && !files.videos)) {
-        const errorMessage = this.i18n.t('message.upload_file.require', { lang: I18nContext.current().lang })
-        throw new BadRequestException(errorMessage);
-      }
+//   )
+//   async uploadFiles(
+//     @Param('id') id: number,
+//     @Body() uploadFileDto: UploadFileDto,
+//     @UploadedFiles()
+//     files: { images?: Express.Multer.File[]; videos?: Express.Multer.File[] },
+//     @I18n() i18n: I18nContext
+//   ) {
+//     try {
+//       if (!files || (!files.images && !files.videos)) {
+//         const errorMessage = this.i18n.t('message.upload_file.require', { lang: I18nContext.current().lang })
+//         throw new BadRequestException(errorMessage);
+//       }
 
-      // Validate image files (max size: 3 MB, file types: jpg, jpeg, png, gif)
-      if (files.images) {
-        for (const file of files.images) {
-          new ParseFilePipe({
-            validators: [
-              new MaxFileSizeValidator({ maxSize: 3 * 1024 * 1024 }), // 3 MB
-              new FileTypeValidator({ fileType: /^(image\/jpeg|image\/jpg|image\/png)$/ }),
-            ],
-          }).transform(file);
-        }
-      }
+//       // Validate image files (max size: 3 MB, file types: jpg, jpeg, png, gif)
+//       if (files.images) {
+//         for (const file of files.images) {
+//           new ParseFilePipe({
+//             validators: [
+//               new MaxFileSizeValidator({ maxSize: 3 * 1024 * 1024 }), // 3 MB
+//               new FileTypeValidator({ fileType: /^(image\/jpeg|image\/jpg|image\/png)$/ }),
+//             ],
+//           }).transform(file);
+//         }
+//       }
 
-      // Validate video files (max size: 10 MB, file types: mp4, mkv, avi)
-      if (files.videos) {
-        for (const file of files.videos) {
-          new ParseFilePipe({
-            validators: [
-              new MaxFileSizeValidator({ maxSize: 15 * 1024 * 1024 }), // 15 MB
-              new FileTypeValidator({ fileType: /^(video\/mp4|video\/mkv|video\/avi)$/ }),
-            ],
-          }).transform(file);
-        }
-      }
+//       // Validate video files (max size: 10 MB, file types: mp4, mkv, avi)
+//       if (files.videos) {
+//         for (const file of files.videos) {
+//           new ParseFilePipe({
+//             validators: [
+//               new MaxFileSizeValidator({ maxSize: 15 * 1024 * 1024 }), // 15 MB
+//               new FileTypeValidator({ fileType: /^(video\/mp4|video\/mkv|video\/avi)$/ }),
+//             ],
+//           }).transform(file);
+//         }
+//       }
 
-      // Call the service to handle the files
-     // const PropertyFile = await this.PropertyService.uploadFiles(id, uploadFileDto, files);
-     // return this.ResponseService(i18n.t('message.upload_file.success'), 200, PropertyFile);
-    } catch (error) {
-      return this.ResponseService(error.message, 400, null);
-    }
-  }
+//       // Call the service to handle the files
+//       // const PropertyFile = await this.PropertyService.uploadFiles(id, uploadFileDto, files);
+//       // return this.ResponseService(i18n.t('message.upload_file.success'), 200, PropertyFile);
+//     } catch (error) {
+//       return this.ResponseService(error.message, 400, null);
+//     }
+//   }
 }
 
 

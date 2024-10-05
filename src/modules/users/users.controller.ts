@@ -19,7 +19,7 @@ export class UsersController {
   ) { }
 
   //create
-  @Post('create')
+  @Post()
   @SetMetadata(CHECK_POLICIES_KEY, [new CreatePolicyHandler()])
   async createUser(@Body() createUserDto: CreateUserDto, @I18n() i18n: I18nContext, @Req() req: CustomRequest): Promise<string> {
     try {
@@ -32,7 +32,7 @@ export class UsersController {
   }
 
   //update
-  @Put('profile/:id')
+  @Put(':id')
   @SetMetadata(CHECK_POLICIES_KEY, [new UpdatePolicyHandler])
   async updateUserProfile(@Param('id') id: number, @Body() updateUserProfileDto: UpdateUserProfileDto, @I18n() i18n: I18nContext): Promise<string> {
     try {
@@ -44,7 +44,7 @@ export class UsersController {
   }
 
   // delete 
-  @Delete('remove/:id')
+  @Delete(':id')
   @SetMetadata(CHECK_POLICIES_KEY, [new DeletePolicyHandler()])
   async removeUser(@Param('id') id: number, @I18n() i18n: I18nContext, @Req() req: CustomRequest): Promise<string> {
     try {
@@ -57,7 +57,7 @@ export class UsersController {
   }
 
   // Get/read
-  @Get('/:id')
+  @Get(':id')
   @SetMetadata(CHECK_POLICIES_KEY, [new ReadPolicyHandler()])
   async getOne(@Param('id') id: number, @I18n() i18n: I18nContext): Promise<string> {
     try {

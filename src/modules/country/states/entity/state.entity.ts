@@ -47,9 +47,4 @@ export class StateEntity {
   @Column({ nullable: true })
   deleted_by: number;
 
-  @Column()
-  divisionId: number; //foreign key
-
-  @OneToMany(() => CityEntity, (city) => city.divisionId) 
-  city: CityEntity[];
 }

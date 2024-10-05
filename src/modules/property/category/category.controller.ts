@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Put, Param, Delete, Inject, Get, Req, UnauthorizedException, UseGuards, SetMetadata,  } from '@nestjs/common';
+import { Body, Controller, Post, Put, Param, Delete, Inject, Get, Req, UnauthorizedException, UseGuards, SetMetadata, } from '@nestjs/common';
 import { I18nContext, I18n } from 'nestjs-i18n';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dtos/create.category.dto';
@@ -8,7 +8,7 @@ import { CategoryGuard } from './guard/category.guard';
 import { CHECK_POLICIES_KEY } from 'src/modules/common/decorators/policies.decorator';
 import { CreateCategoryHandler, DeleteCategoryHandler, ReadCategoryHandler, UpdateCategoryHandler } from './permission-abilities/category.policy';
 
-@Controller('property/category')
+@Controller()
 @UseGuards(CategoryGuard)
 export class CategoryController {
     constructor(
@@ -17,7 +17,7 @@ export class CategoryController {
     ) { }
 
     //create 
-    @Post('create')
+    @Post()
     @SetMetadata(CHECK_POLICIES_KEY, [new CreateCategoryHandler()])
     async createCategory(@Body() dto: CreateCategoryDto, @I18n() i18n: I18nContext, @Req() req: CustomRequest): Promise<string> {
         try {
@@ -33,7 +33,7 @@ export class CategoryController {
     }
 
     //update 
-    @Put('update/:id')
+    @Put(':id')
     @SetMetadata(CHECK_POLICIES_KEY, [new UpdateCategoryHandler()])
     async updateCategory(@Param('id') id: number, @Body() dto: UpdateCategoryDto, @I18n() i18n: I18nContext): Promise<string> {
         try {
@@ -45,7 +45,7 @@ export class CategoryController {
     }
 
     // delete 
-    @Delete('remove/:id')
+    @Delete(':id')
     @SetMetadata(CHECK_POLICIES_KEY, [new DeleteCategoryHandler()])
     async removeCategory(
         @Param('id',) id: number,
@@ -67,7 +67,7 @@ export class CategoryController {
 
 
     // Get/read 
-    @Get('/:id')
+    @Get(':id')
     @SetMetadata(CHECK_POLICIES_KEY, [new ReadCategoryHandler()])
     async getOne(@Param('id') id: number, @I18n() i18n: I18nContext): Promise<string> {
         try {

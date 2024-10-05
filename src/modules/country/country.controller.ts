@@ -9,7 +9,7 @@ import { CHECK_POLICIES_KEY } from 'src/modules/common/decorators/policies.decor
 import { CreateCountryHandler, DeleteCountryHandler, ReadCountryHandler, UpdateCountryHandler } from './permission-abilities/country.policy';
 import { CountryGuard } from './guard/country.guard';
 
-@Controller('country')
+@Controller('countries')
 @UseGuards(CountryGuard)
 export class CountryController {
     constructor(
@@ -18,7 +18,7 @@ export class CountryController {
     ) { }
 
     //create
-    @Post('create')
+    @Post()
     @SetMetadata(CHECK_POLICIES_KEY, [new CreateCountryHandler()])
     async createCountry(@Body() Dto: CreateCountryDto, @I18n() i18n: I18nContext, @Req() req: CustomRequest): Promise<string> {
         try {
@@ -31,7 +31,7 @@ export class CountryController {
     }
 
     //update
-    @Put('/:id')
+    @Put(':id')
     @SetMetadata(CHECK_POLICIES_KEY, [new UpdateCountryHandler()])
     async updateCountry(@Param('id') id: number, @Body() Dto: UpdateCountryDto, @I18n() i18n: I18nContext): Promise<string> {
         try {
@@ -43,7 +43,7 @@ export class CountryController {
     }
 
     // delete 
-    @Delete('remove/:id')
+    @Delete(':id')
     @SetMetadata(CHECK_POLICIES_KEY, [new DeleteCountryHandler()])
     async removeCountry(@Param('id') id: number, @I18n() i18n: I18nContext, @Req() req: CustomRequest): Promise<string> {
         try {
@@ -56,7 +56,7 @@ export class CountryController {
     }
 
     // Get/read
-    @Get('/:id')
+    @Get(':id')
     @SetMetadata(CHECK_POLICIES_KEY, [new ReadCountryHandler()])
     async getOneCountry(@Param('id') id: number, @I18n() i18n: I18nContext): Promise<string> {
         try {

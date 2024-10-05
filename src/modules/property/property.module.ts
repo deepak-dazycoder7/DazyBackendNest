@@ -16,7 +16,7 @@ import { SubCategoryModule } from './sub-category/SubCategory.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([PropertyEntity]),
+    TypeOrmModule.forFeature([PropertyEntity]), 
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'uploads'),
       serveRoot: '/uploads', // Serve files at /uploads endpoint

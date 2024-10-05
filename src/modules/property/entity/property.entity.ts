@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn,  CreateDateColumn, UpdateDateColumn,DeleteDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
 import { Exclude } from 'class-transformer';
 
 @Entity('property-table')
@@ -7,7 +7,7 @@ export class PropertyEntity {
   id: number;
 
   @Column({ length: 255 })
-  property_name: string;
+  property_title: string;
 
   @Column('text')
   description: string;

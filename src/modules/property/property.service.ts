@@ -1,4 +1,4 @@
-import { NotFoundException, Injectable, ConflictException } from '@nestjs/common';
+import { NotFoundException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreatePropertyDto } from 'src/modules/property/dtos/create.property.dto';
 import { PropertyEntity } from 'src/modules/property/entity/property.entity';
@@ -20,7 +20,7 @@ export class PropertyService {
 
     // Create a new Property
     async createProperty(createPropertyDto: CreatePropertyDto, userId: number): Promise<PropertyEntity> {
-        const Property = this.propertyRepository.create({...createPropertyDto, created_by: userId});
+        const Property = this.propertyRepository.create({ ...createPropertyDto, created_by: userId });
         return this.propertyRepository.save(Property);
     }
 
@@ -34,13 +34,13 @@ export class PropertyService {
     // Delete a Property by ID
     async softDeletePropertyType(id: number, deleted_by: number): Promise<void> {
         await this.datasource
-          .getRepository(PropertyEntity)
-          .createQueryBuilder()
-          .update(PropertyEntity)
-          .set({ deleted_at: new Date(), deleted_by: deleted_by })  
-          .where("id = :id", { id })
-          .execute();
-      }
+            .getRepository(PropertyEntity)
+            .createQueryBuilder()
+            .update(PropertyEntity)
+            .set({ deleted_at: new Date(), deleted_by: deleted_by })
+            .where("id = :id", { id })
+            .execute();
+    }
 
     // Get a Property by ID
     async getPropertyById(id: number): Promise<PropertyEntity> {

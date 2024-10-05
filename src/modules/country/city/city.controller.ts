@@ -9,7 +9,7 @@ import { CHECK_POLICIES_KEY } from 'src/modules/common/decorators/policies.decor
 import { CreateCityHandler, UpdateCityHandler, DeleteCityHandler, ReadCityHandler } from './permission-ability/city.policy';
 import { CityGuard } from './guard/city.guard';
 
-@Controller('city')
+@Controller()
 @UseGuards(CityGuard)
 export class CityController {
     constructor(
@@ -18,7 +18,7 @@ export class CityController {
     ) { }
 
     //create
-    @Post('create')
+    @Post()
     @SetMetadata(CHECK_POLICIES_KEY, [new CreateCityHandler()])
     async createCity(@Body() Dto: CreateCityDto, @I18n() i18n: I18nContext, @Req() req: CustomRequest): Promise<string> {
         try {
@@ -31,7 +31,7 @@ export class CityController {
     }
 
     //update
-    @Put('/:id')
+    @Put(':id')
     @SetMetadata(CHECK_POLICIES_KEY, [new UpdateCityHandler()])
     async updateCity(@Param('id') id: number, @Body() Dto: UpdateCityDto, @I18n() i18n: I18nContext): Promise<string> {
         try {
@@ -43,7 +43,7 @@ export class CityController {
     }
 
     // delete 
-    @Delete('remove/:id')
+    @Delete(':id')
     @SetMetadata(CHECK_POLICIES_KEY, [new DeleteCityHandler()])
     async removeCity(@Param('id') id: number, @I18n() i18n: I18nContext, @Req() req: CustomRequest): Promise<string> {
         try {
@@ -56,7 +56,7 @@ export class CityController {
     }
 
     // Get/read
-    @Get('/:id')
+    @Get(':id')
     @SetMetadata(CHECK_POLICIES_KEY, [new ReadCityHandler()])
     async getOneCity(@Param('id') id: number, @I18n() i18n: I18nContext): Promise<string> {
         try {

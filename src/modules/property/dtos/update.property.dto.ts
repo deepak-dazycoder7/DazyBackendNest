@@ -3,7 +3,7 @@ import { i18nValidationMessage } from 'nestjs-i18n';
 export class UpdatePropertyDto {
   @IsString({ message: i18nValidationMessage('validation.isString') })
   @IsOptional()
-  property_name?: string;
+  property_title?: string;
 
   @IsString({ message: i18nValidationMessage('validation.isString') })
   @IsOptional()

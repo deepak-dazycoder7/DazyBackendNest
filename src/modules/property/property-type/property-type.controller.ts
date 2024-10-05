@@ -9,7 +9,7 @@ import { PropertyTypeGuard } from './guard/property-type.guard';
 import { CHECK_POLICIES_KEY } from 'src/modules/common/decorators/policies.decorator';
 import { CreatePropertyTypeHandler, DeletePropertyTypeHandler, ReadPropertyTypeHandler, UpdatePropertyTypeHandler } from './permission-abilities/property.type.policy';
 
-@Controller('type')
+@Controller()
 @UseGuards(PropertyTypeGuard)
 export class TypeController {
   constructor(
@@ -18,7 +18,7 @@ export class TypeController {
   ) { }
 
   //create
-  @Post('create')
+  @Post()
   @SetMetadata(CHECK_POLICIES_KEY,[new CreatePropertyTypeHandler()])
   async createPropertyType(@Body() Dto: CreatePropertyTypeDto, @I18n() i18n: I18nContext, @Req() req : CustomRequest): Promise<PropertyTypeEntity> {
     try {
@@ -31,7 +31,7 @@ export class TypeController {
   }
 
   //update 
-  @Put('/:id')
+  @Put(':id')
   @SetMetadata(CHECK_POLICIES_KEY,[new UpdatePropertyTypeHandler()])
   async updatePropertytype(@Param('id') id: number, @Body() Dto: UpdatePropertyTypeDto, @I18n() i18n: I18nContext): Promise<PropertyTypeEntity> {
     try {
@@ -43,7 +43,7 @@ export class TypeController {
   }
 
   //delete 
-  @Delete('/:id')
+  @Delete(':id')
   @SetMetadata(CHECK_POLICIES_KEY,[new DeletePropertyTypeHandler()])
   async deletePropertyType(@Param('id') id: number, @I18n() i18n: I18nContext, @Req() req : CustomRequest): Promise<void> {
     try {

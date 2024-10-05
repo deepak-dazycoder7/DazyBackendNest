@@ -47,6 +47,4 @@ export class CountryEntity {
   @Column({ nullable: true })
   deleted_by: number;
 
-  @OneToMany(() => StateEntity, (state) => state.divisionId) 
-  state: StateEntity[];
 }

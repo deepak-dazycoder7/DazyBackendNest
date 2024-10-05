@@ -17,27 +17,27 @@ export class TypeService {
   ) { }
 
   //create 
-  async createPropertyType(Dto: CreatePropertyTypeDto, userId : number): Promise<PropertyTypeEntity> {
-    const propertyType = this.propertyTypeRepository.create({...Dto, created_by: userId});
+  async createPropertyType(Dto: CreatePropertyTypeDto, userId: number): Promise<PropertyTypeEntity> {
+    const propertyType = this.propertyTypeRepository.create({ ...Dto, created_by: userId });
     return this.propertyTypeRepository.save(propertyType);
   }
 
   // Update
   async updatePropertType(id: number, Dto: UpdatePropertyTypeDto): Promise<PropertyTypeEntity> {
-    const propertyType = this.propertyTypeRepository.create({ ...Dto, id });
-    return this.propertyTypeRepository.save(propertyType);
+    await this.propertyTypeRepository.update( id, Dto );
+    return this.propertyTypeRepository.findOne({ where: { id } });
   }
 
   // Delete 
- async softDeletePropertyType(id: number, deleted_by: number): Promise<void> {
-  await this.datasource
-    .getRepository(PropertyTypeEntity)
-    .createQueryBuilder()
-    .update(PropertyTypeEntity)
-    .set({ deleted_at: new Date(), deleted_by: deleted_by })  
-    .where("id = :id", { id })
-    .execute();
-}
+  async softDeletePropertyType(id: number, deleted_by: number): Promise<void> {
+    await this.datasource
+      .getRepository(PropertyTypeEntity)
+      .createQueryBuilder()
+      .update(PropertyTypeEntity)
+      .set({ deleted_at: new Date(), deleted_by: deleted_by })
+      .where("id = :id", { id })
+      .execute();
+  }
   //find all
   async findAll(): Promise<PropertyTypeEntity[]> {
     const propertyType = await this.propertyTypeRepository.find();

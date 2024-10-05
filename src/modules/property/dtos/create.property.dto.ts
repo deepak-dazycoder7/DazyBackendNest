@@ -5,7 +5,7 @@ import { i18nValidationMessage } from 'nestjs-i18n';
 export class CreatePropertyDto {
   @IsString({ message: i18nValidationMessage('validation.isString') })
   @IsNotEmpty({ message: i18nValidationMessage('validation.isNotEmpty') })
-  property_name: string;
+  property_title: string;
 
   @IsString({ message: i18nValidationMessage('validation.isString') })
   @IsNotEmpty({ message: i18nValidationMessage('validation.isNotEmpty') })
