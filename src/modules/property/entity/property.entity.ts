@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
 import { Exclude } from 'class-transformer';
 
-@Entity('property-table')
+@Entity('property')
 export class PropertyEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -12,11 +12,9 @@ export class PropertyEntity {
   @Column('text')
   description: string;
 
+  @Column({ default: true })
   @Column('decimal', { precision: 10, scale: 2 })
   price: number;
-
-  @Column({ length: 255 })
-  location: string;
 
   @Column({ default: true })
   isAvailable: boolean;
@@ -24,20 +22,8 @@ export class PropertyEntity {
   @Column({ type: 'simple-array', nullable: true })
   amenities: string[];
 
-  @Column({ length: 255 })
-  street: string;
-
-  @Column({ length: 100 })
-  city: string;
-
-  @Column({ length: 100 })
-  state: string;
-
-  @Column({ length: 20 })
-  zipCode: string;
-
-  @Column({ length: 100 })
-  country: string;
+  @Column({ default: true })
+  status: boolean;
 
   @CreateDateColumn({
     type: 'timestamp',

@@ -18,8 +18,8 @@ export class CountryService {
 
     //create 
     async createCountry(Dto: CreateCountryDto, userId: number): Promise<CountryEntity> {
-        const Property = this.countryRepository.create({ ...Dto, created_by: userId });
-        return this.countryRepository.save(Property);
+        const Country = this.countryRepository.create({ ...Dto, created_by: userId });
+        return this.countryRepository.save(Country);
     }
 
     //update 

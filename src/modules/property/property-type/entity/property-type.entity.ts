@@ -15,6 +15,9 @@ export class PropertyTypeEntity {
   @Column('text')
   description: string;
 
+  @Column({ type: 'int' })
+  division_id: number; 
+
   @CreateDateColumn({
     type: 'timestamp',
     precision: 0,

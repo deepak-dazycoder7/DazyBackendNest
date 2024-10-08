@@ -15,6 +15,9 @@ export class SubCategoryEntity {
   @Column('text')
   description: string;
 
+  @Column({ type: 'int' })
+  category_id: number; 
+
   @CreateDateColumn({
     type: 'timestamp',
     precision: 0,

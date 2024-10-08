@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CityEntity } from 'src/modules/country/city/entity/city.entity';
 import { CountryEntity } from 'src/modules/country/entity/country.entity';
 import { StateEntity } from 'src/modules/country/states/entity/state.entity';
+import { AddressEntity } from 'src/modules/property/address/entity/Address.entity';
 import { CategoryEntity } from 'src/modules/property/category/entity/category.entity';
 import { DivisionEntity } from 'src/modules/property/division/entity/division.entity';
 import { PropertyEntity } from 'src/modules/Property/entity/property.entity';
@@ -20,7 +21,7 @@ import { UserEntity } from 'src/modules/users/entity/user.entity';
         username: process.env.DATABASE_USER || 'root',
         password: process.env.DATABASE_PASSWORD || '',
         database: process.env.DATABASE_NAME || 'dazynestdb',
-        entities: [UserEntity, PropertyEntity, PropertyTypeEntity, DivisionEntity, CategoryEntity, CountryEntity, StateEntity, CityEntity, SubCategoryEntity],
+        entities: [UserEntity, PropertyEntity, PropertyTypeEntity, DivisionEntity, CategoryEntity, CountryEntity, StateEntity, CityEntity, SubCategoryEntity, AddressEntity],
         synchronize: true,
         //logging: true,
       }),

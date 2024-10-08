@@ -12,6 +12,7 @@ import { DivisionModule } from './division/division.module';
 import { CategoryModule } from './category/category.module';
 import { RouterModule } from '@nestjs/core';
 import { SubCategoryModule } from './sub-category/SubCategory.module';
+import { AddressModule } from './address/address.module';
 
 
 @Module({
@@ -46,6 +47,10 @@ import { SubCategoryModule } from './sub-category/SubCategory.module';
             path: 'sub-category',
             module: SubCategoryModule, 
           },
+          {
+            path: 'address',
+            module: AddressModule, 
+          }
         ],
       },
     ]),
@@ -53,7 +58,8 @@ import { SubCategoryModule } from './sub-category/SubCategory.module';
     DivisionModule,
     TypeModule,
     CategoryModule,
-    SubCategoryModule
+    SubCategoryModule,
+    AddressModule
   ],
   controllers: [PropertyController],
   providers: [PropertyService, PropertyAbilityFactory, PropertyGuard, ],
