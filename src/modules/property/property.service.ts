@@ -1,6 +1,6 @@
 import { NotFoundException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreatePropertyDto } from 'src/modules/property/dtos/create.property.dto';
+import { CreatePropertyDto } from './dtos/create.property.dto';
 import { PropertyEntity } from 'src/modules/property/entity/property.entity';
 import { PropertyRepository } from 'src/modules/property/repository/property.repository';
 import { UpdatePropertyDto } from 'src/modules/property/dtos/update.property.dto';
@@ -31,7 +31,7 @@ export class PropertyService {
     }
 
     // Delete 
-    async softDeletePropertyType(id: number, deleted_by: number): Promise<void> {
+    async softDeleteProperty(id: number, deleted_by: number): Promise<void> {
         await this.datasource
             .getRepository(PropertyEntity)
             .createQueryBuilder()

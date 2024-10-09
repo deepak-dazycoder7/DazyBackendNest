@@ -7,6 +7,7 @@ import { AddressEntity } from 'src/modules/property/address/entity/Address.entit
 import { CategoryEntity } from 'src/modules/property/category/entity/category.entity';
 import { DivisionEntity } from 'src/modules/property/division/entity/division.entity';
 import { PropertyEntity } from 'src/modules/Property/entity/property.entity';
+import { FilesEntity } from 'src/modules/property/files/entity/file.entity';
 import { PropertyTypeEntity } from 'src/modules/property/property-type/entity/property-type.entity';
 import { SubCategoryEntity } from 'src/modules/property/sub-category/entity/subCategory.entity';
 import { UserEntity } from 'src/modules/users/entity/user.entity';
@@ -21,7 +22,7 @@ import { UserEntity } from 'src/modules/users/entity/user.entity';
         username: process.env.DATABASE_USER || 'root',
         password: process.env.DATABASE_PASSWORD || '',
         database: process.env.DATABASE_NAME || 'dazynestdb',
-        entities: [UserEntity, PropertyEntity, PropertyTypeEntity, DivisionEntity, CategoryEntity, CountryEntity, StateEntity, CityEntity, SubCategoryEntity, AddressEntity],
+        entities: [UserEntity, PropertyEntity, PropertyTypeEntity, DivisionEntity, CategoryEntity, CountryEntity, StateEntity, CityEntity, SubCategoryEntity, AddressEntity, FilesEntity],
         synchronize: true,
         //logging: true,
       }),

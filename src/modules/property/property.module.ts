@@ -11,22 +11,23 @@ import { CategoryModule } from './category/category.module';
 import { RouterModule } from '@nestjs/core';
 import { SubCategoryModule } from './sub-category/SubCategory.module';
 import { AddressModule } from './address/address.module';
+import { FilesModule } from './files/files.module';
 
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([PropertyEntity]), 
+    TypeOrmModule.forFeature([PropertyEntity]),
     RouterModule.register([
       {
         path: 'property',
         children: [
           {
             path: 'property',
-            module: PropertyModule, 
+            module: PropertyModule,
           },
           {
             path: 'division',
-            module: DivisionModule, 
+            module: DivisionModule,
           },
           {
             path: 'type',
@@ -34,15 +35,19 @@ import { AddressModule } from './address/address.module';
           },
           {
             path: 'category',
-            module: CategoryModule, 
+            module: CategoryModule,
           },
           {
             path: 'sub-category',
-            module: SubCategoryModule, 
+            module: SubCategoryModule,
           },
           {
             path: 'address',
-            module: AddressModule, 
+            module: AddressModule,
+          },
+          {
+            path: 'file',
+            module: FilesModule,
           }
         ],
       },
@@ -52,10 +57,11 @@ import { AddressModule } from './address/address.module';
     TypeModule,
     CategoryModule,
     SubCategoryModule,
-    AddressModule
+    AddressModule,
+    FilesModule
   ],
   controllers: [PropertyController],
-  providers: [PropertyService, PropertyAbilityFactory, PropertyGuard, ],
+  providers: [PropertyService, PropertyAbilityFactory, PropertyGuard,],
   exports: [PropertyService, PropertyAbilityFactory]
 })
 export class PropertyModule { }

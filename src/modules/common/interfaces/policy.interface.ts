@@ -8,6 +8,7 @@ import { StateAppAbility as StateAbilityFactory } from 'src/modules/country/stat
 import { CityAppAbility as CityAbilityFactory } from 'src/modules/country/city/permission-ability/city.abiity.factory';
 import { SubCategoryAppAbility as SubCategoryAbilityFactory } from 'src/modules/property/sub-category/permission-abilities/subcategory.ability.factory';
 import { AddressAppAbility as AddressAbilityFactory } from 'src/modules/property/address/permission-abilities/address.ability.factory';
+import { FilesAppAbility as FilesAbilityFactory } from 'src/modules/property/files/permission-abilities/files.ability.fsctory';
 
 export interface UserPolicyHandler {
   handle(ability: UserAppAbility): boolean;
@@ -49,6 +50,10 @@ export interface AddressPolicyHandler {
   handle(ability: AddressAbilityFactory): boolean;
 }
 
+export interface FilesPolicyHandler {
+  handle(ability: FilesAbilityFactory): boolean;
+}
+
 export type UserPolicyHandlerCallback = (ability: UserAppAbility) => boolean;
 export type PropertyPolicyHandlerCallback = (ability: PropertyAppAbility) => boolean;
 export type CategoryPolicyHandlerCallback = (ability: CategoryAbilityFactory) => boolean;
@@ -59,3 +64,4 @@ export type StatePolicyHandlerCallback = (ability: StateAbilityFactory) => boole
 export type CityPolicyHandlerCallback = (ability: CityAbilityFactory) => boolean;
 export type SubCategoryHandlerCallback = (ability: SubCategoryAbilityFactory) => boolean;
 export type AddressHandlerCallback = (ability: AddressAbilityFactory) => boolean;
+export type FilesHandlerCallback = (ability: FilesAbilityFactory) => boolean;

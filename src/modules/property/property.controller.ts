@@ -1,6 +1,6 @@
 import { Body, Controller, Post, Put, Param, Delete, Get, Inject, SetMetadata, UseGuards, Req } from '@nestjs/common';
 import { PropertyService } from './property.service';
-import { CreatePropertyDto } from 'src/modules/property/dtos/create.property.dto';
+import { CreatePropertyDto } from './dtos/create.property.dto';
 import { UpdatePropertyDto } from 'src/modules/property/dtos/update.property.dto';
 import { CHECK_POLICIES_KEY } from 'src/modules/common/decorators/policies.decorator';
 import { CreatePropertyHandler, UpdatePropertyHandler, DeletePropertyHandler, ReadPropertyHandler } from 'src/modules/property/permission-abilities/property.policy';
@@ -50,7 +50,7 @@ export class PropertyController {
   async deleteProperty(@Param('id') id: number, @I18n() i18n: I18nContext, @Req() req: CustomRequest): Promise<any> {
     try {
       const deletedBy = req.user?.sub
-      await this.PropertyService.softDeletePropertyType(id, deletedBy);
+      await this.PropertyService.softDeleteProperty(id, deletedBy);
       return this.ResponseService(i18n.t('message.delete_success.property'), 200, null);
     } catch (error) {
       return this.ResponseService(error.message, 400, null);
