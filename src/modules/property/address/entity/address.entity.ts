@@ -26,8 +26,8 @@ import {
     @Column({ type: 'varchar', length: 130, nullable: true, default: null })
     landmark: string | null;
   
-    @Column({ length: 10 })
-    zipCode: number;
+    @Column({ length: 8 })
+    zipCode: string;
   
     @Column({ type: 'varchar', length: 50 })
     latitude: string;

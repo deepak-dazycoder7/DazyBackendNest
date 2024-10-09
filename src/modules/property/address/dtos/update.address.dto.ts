@@ -23,6 +23,7 @@ import {
     @IsString({ message: i18nValidationMessage('validation.isString') })
     @IsNotEmpty({ message: i18nValidationMessage('validation.isNotEmpty') })
     @Length(1, 150, { message: i18nValidationMessage('validation.length') })
+    @IsOptional()
     address: string;
   
     @IsString({ message: i18nValidationMessage('validation.isString') })
@@ -31,15 +32,18 @@ import {
     landmark: string | null;
   
     @IsPostalCode('any')
+    @IsOptional()
     @IsNotEmpty({ message: i18nValidationMessage('validation.isNotEmpty') })
-    zipCode: number;
+    zipCode: string;
   
     @IsString({ message: i18nValidationMessage('validation.isString') })
     @IsNotEmpty({ message: i18nValidationMessage('validation.isNotEmpty') })
+    @IsOptional()
     latitude: string;
   
     @IsString({ message: i18nValidationMessage('validation.isString') })
     @IsNotEmpty({ message: i18nValidationMessage('validation.isNotEmpty') })
+    @IsOptional()
     longitude: string;
   }
   

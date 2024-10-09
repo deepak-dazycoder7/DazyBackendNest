@@ -5,8 +5,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PropertyEntity } from 'src/modules/property/entity/property.entity';
 import { PropertyAbilityFactory } from 'src/modules/property/permission-abilities/property-ability.factory';
 import { PropertyGuard } from '../property/guards/permission.guard';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
 import { TypeModule } from './property-type/property-type.module';
 import { DivisionModule } from './division/division.module';
 import { CategoryModule } from './category/category.module';
@@ -18,11 +16,6 @@ import { AddressModule } from './address/address.module';
 @Module({
   imports: [
     TypeOrmModule.forFeature([PropertyEntity]), 
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'uploads'),
-      serveRoot: '/uploads', // Serve files at /uploads endpoint
-    }),
-
     RouterModule.register([
       {
         path: 'property',

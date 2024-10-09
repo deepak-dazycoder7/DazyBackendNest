@@ -3,12 +3,12 @@ import { AddressController } from "./Address.controller";
 import { AddressService } from "./Address.service";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { AddressEntity } from "./entity/Address.entity";
-import { AddressAbilityFactory } from "./permission-abilities/Address.ability.factory";
+import { AddressAbilityFactory } from "./permission-abilities/address.ability.factory";
 
 @Module({
     imports: [TypeOrmModule.forFeature([AddressEntity])],
     controllers: [AddressController],
     providers: [AddressService, AddressAbilityFactory],
-    exports: [AddressService,]
+    exports: [AddressService]
 })
 export class AddressModule { }

@@ -1,4 +1,4 @@
-import { IsString, IsDecimal, IsBoolean, IsOptional, IsEnum, IsDate, IsArray, IsUrl, IsPostalCode, IsNumber } from 'class-validator';
+import { IsString, IsDecimal, IsOptional, IsArray, IsNumber } from 'class-validator';
 import { i18nValidationMessage } from 'nestjs-i18n';
 export class UpdatePropertyDto {
   @IsString({ message: i18nValidationMessage('validation.isString') })

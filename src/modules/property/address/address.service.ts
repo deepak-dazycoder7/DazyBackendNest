@@ -5,7 +5,6 @@ import { AddressEntity } from './entity/Address.entity';
 import { AddressRepository } from './repository/Address.repository';
 import { UpdateAddressDto } from './dtos/update.Address.dto';
 import { I18nContext, I18nService } from 'nestjs-i18n';
-import { DataSource } from 'typeorm';
 
 @Injectable()
 export class AddressService {
@@ -13,7 +12,6 @@ export class AddressService {
         @InjectRepository(AddressEntity)
         private readonly AddressRepository: AddressRepository,
         private readonly i18n: I18nService,
-        private readonly datasource: DataSource
     ) { }
 
     //create 

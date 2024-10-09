@@ -27,8 +27,3 @@ export class ReadPropertyHandler implements PropertyPolicyHandler {
   }
 }
 
-export class UploadFileHandler implements PropertyPolicyHandler {
-  handle(ability: AppAbility): boolean {
-    return ability.can(Action.Upload, PropertyEntity); // Check if the user can upload files
-  }
-}
