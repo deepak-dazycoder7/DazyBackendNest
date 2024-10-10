@@ -10,8 +10,9 @@ import { join } from "path";
 @Module({
     imports: [TypeOrmModule.forFeature([FilesEntity]),
     ServeStaticModule.forRoot({
-        rootPath: join(__dirname, '..', '..', 'uploads'), 
-      }),
+      rootPath: join(__dirname, '..', '..', 'uploads'), 
+      serveRoot: '/uploads', 
+    }),
     ],
     controllers: [FilesController],
     providers: [FilesService, FilesAbilityFactory],

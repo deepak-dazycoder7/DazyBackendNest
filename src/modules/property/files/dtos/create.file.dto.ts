@@ -6,8 +6,8 @@ export class CreateFileDto {
     @IsNotEmpty({ message: i18nValidationMessage('validation.isNotEmpty') })
     file_name: string;
 
-    @IsUrl()
-    @IsNotEmpty({ message: i18nValidationMessage('validation.isNotEmpty') })
+   // @IsUrl(undefined, { message: 'Company URL is not valid.' })
+    // @IsNotEmpty({ message: i18nValidationMessage('validation.isNotEmpty') })
     url: string;
 
     @IsString({ message: i18nValidationMessage('validation.isString') })

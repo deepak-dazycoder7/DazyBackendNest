@@ -26,7 +26,7 @@ export class FilesController {
     @UseInterceptors(
         FileInterceptor('file', {
             storage: diskStorage({
-                destination: './uploads', // Directory where files will be stored
+                destination: './uploads',
                 filename: (req, file, callback) => {
                     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
                     const ext = extname(file.originalname);
@@ -35,7 +35,6 @@ export class FilesController {
                 },
             }),
             fileFilter: (req, file, callback) => {
-                // Only accept specific file formats
                 const allowedMimeTypes = ['image/jpeg', 'image/png', 'video/mp4', 'application/pdf'];
                 if (allowedMimeTypes.includes(file.mimetype)) {
                     callback(null, true);
@@ -45,11 +44,25 @@ export class FilesController {
             },
         }),
     )
-    async uploadFile(@UploadedFile() file: Express.Multer.File, @Body() createFileDto: CreateFileDto, @I18n() i18n: I18nContext, @Req() req: CustomRequest) {
+    async uploadFile(
+        @UploadedFile() file: Express.Multer.File,
+        @Body() createFileDto: CreateFileDto,
+        @I18n() i18n: I18nContext,
+        @Req() req: CustomRequest
+    ) {
         try {
-            const createdBy = req.user?.sub
-            const fileUrl = `/uploads/${file.filename}`;
-            createFileDto.url = fileUrl;
+            // Ensure the uploaded file is available and has a filename
+            if (!file) {
+                return this.ResponseService(i18n.t('message.error.file_missing'), 400, null);
+            }
+
+            const createdBy = req.user?.sub;
+
+            // Generate the URL based on the uploaded file's name
+            const fileUrl = `${req.protocol}://${req.get('host')}/uploads/${file.filename}`;
+            createFileDto.url = fileUrl;  // Assign generated URL to DTO
+
+            // Set the format based on file extension
             createFileDto.format = extname(file.filename).replace('.', '');
 
             // Determine file type (image, video, document)
@@ -59,14 +72,26 @@ export class FilesController {
                 createFileDto.type = 'video';
             } else if (file.mimetype === 'application/pdf') {
                 createFileDto.type = 'document';
+            } else {
+                return this.ResponseService('Invalid file type', 400, null);
             }
+
+            // Call the service to save the file details in the database
             const Files = await this.FilesService.createFiles(createFileDto, createdBy);
-            return this.ResponseService(i18n.t('message.success.create', { args: { entity: 'Files' } }), 200, Files);
+
+            return this.ResponseService(
+                i18n.t('message.success.create', { args: { entity: 'Files' } }),
+                200,
+                Files
+            );
         } catch (error) {
+            // Handle any errors and return the appropriate response
             return this.ResponseService(error.message, 400, null);
         }
-
     }
+
+
+
 
     //update
     @Put(':id')
