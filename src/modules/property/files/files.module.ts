@@ -15,6 +15,6 @@ import { join } from "path";
     }),
     ],
     controllers: [FilesController],
-    providers: [FilesService, FilesAbilityFactory],
+    providers: [FilesService, FilesAbilityFactory, ],
 })
 export class FilesModule { }
