@@ -1,4 +1,4 @@
-import { NotFoundException, Injectable } from '@nestjs/common';
+import { NotFoundException, Injectable, Inject, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateFileDto } from './dtos/create.file.dto';
 import { FilesEntity } from './entity/file.entity';
@@ -9,11 +9,8 @@ import * as fs from 'fs-extra';
 import * as path from 'path';
 import * as sharp from 'sharp';
 import { Request } from 'express';
+import { PropertyRepository } from '../repository/property.repository';
 import { getUploadRules } from './file-upload-rules';
-import { CategoryService } from '../category/category.service';
-import { CreateCategoryDto } from '../category/dtos/create.category.dto';
-import { SubCategoryService } from '../sub-category/SubCategory.service';
-import { SubCategoryDto } from '../sub-category/dtos/SubCategory.dto';
 
 @Injectable()
 export class FilesService {
@@ -21,215 +18,124 @@ export class FilesService {
         @InjectRepository(FilesEntity)
         private readonly FilesRepository: FilesRepository,
         private readonly i18n: I18nService,
-        private readonly categoryService : CategoryService,
-        private readonly subCategoryService : SubCategoryService
+        @Inject(forwardRef(() => PropertyRepository))
+        private readonly propertyRepository: PropertyRepository,
     ) { }
 
-    // async compressAndSaveImage(
-    //     file: Express.Multer.File,
-    //     userId: number,
-    //     dto: CreateFileDto,
-    //     req: Request
-    // ): Promise<FilesEntity> {
-    //     const uploadsDir = path.resolve(process.cwd(), 'uploads');
-    //     await fs.mkdir(uploadsDir, { recursive: true });
+    async compressAndSaveImage(
+        files: Express.Multer.File[],
+        userId: number,
+        dto: CreateFileDto,
+        req: Request,
+        propertyId: number
+    ): Promise<FilesEntity[]> {
+        const uploadsDir = path.resolve(process.cwd(), 'uploads');
+        await fs.mkdir(uploadsDir, { recursive: true });
+        console.log('Property Repository:', this.propertyRepository);
 
-    //     const originalImagePath = path.join(uploadsDir, file.originalname);
-    //     await fs.writeFile(originalImagePath, file.buffer); // Save the original file
+        // Fetch property details to determine category and sub-category
+        const property = await this.propertyRepository.findOne({ where: { id: propertyId } });
 
-    //     const fileSizeInMB = file.size / (1024 * 1024);
-    //     let compressedImagePath = originalImagePath; // Default to original if no compression needed
+        if (!property) {
+            throw new Error("Property not found");
+        }
 
-    //     // Check if compression is needed and handle it
-    //     if (fileSizeInMB > 1) {
-    //         compressedImagePath = await this.compressImage(file, uploadsDir, originalImagePath);
-    //     }
+        // Get the category and sub-category from the property details
+        const category = property.category_id; // Assuming category field
+        const subCategory = property.subCategory_id; // Assuming subCategory field
 
-    //     // Generate the file URL for either compressed or original image
-    //     const compressedImageUrl = this.generateFileUrl(req, compressedImagePath);
+        // Retrieve the upload rules using the dynamic method
+        const rules = getUploadRules(category, subCategory,); // Assuming bathroomType is available in property
+        if (!rules) {
+            throw new Error("Upload rules not found for the given category and sub-category.");
+        }
 
-    //     const fileDtoWithUrls: CreateFileDto = {
-    //         ...dto,
-    //         url: compressedImageUrl,
-    //     };
+        let imagesCount = 0;
+        let videosCount = 0;
 
-    //     return this.createFiles(fileDtoWithUrls, userId);
-    // }
+        // Loop through each file to validate and process
+        const fileEntities: FilesEntity[] = [];
+        for (const file of files) {
+            if (file.mimetype.startsWith('image/')) {
+                imagesCount++;
+            } else if (file.mimetype.startsWith('video/')) {
+                videosCount++;
+            }
 
-    // private async compressImage(file: Express.Multer.File, uploadsDir: string, originalImagePath: string): Promise<string> {
-    //     const compressedImageName = `compressed-${Date.now()}-${file.originalname}`;
-    //     const compressedImagePath = path.join(uploadsDir, compressedImageName);
-    //     const format = file.mimetype.split('/')[1]; // Extract format (jpg, png, etc.)
-    //     const sharpInstance = sharp(file.buffer);
+            // Validate against the rules
+            if (imagesCount > rules.images.room || videosCount > rules.video) {
+                throw new Error("Exceeded upload limits based on property rules.");
+            }
 
-    //     switch (format) {
-    //         case 'jpeg':
-    //         case 'jpg':
-    //             await sharpInstance.jpeg({ quality: 30 }).toFile(compressedImagePath);
-    //             break;
-    //         case 'png':
-    //             await sharpInstance.jpeg({ quality: 100 }).toFile(compressedImagePath); // Convert PNG to JPEG
-    //             break;
-    //         case 'webp':
-    //             await sharpInstance.webp({ quality: 60 }).toFile(compressedImagePath);
-    //             break;
-    //         case 'gif':
-    //             await sharpInstance.gif({ effort: 3 }).toFile(compressedImagePath);
-    //             break;
-    //         default:
-    //             await fs.copyFile(originalImagePath, compressedImagePath);
-    //             break;
-    //     }
+            const originalImagePath = path.join(uploadsDir, file.originalname);
+            await fs.writeFile(originalImagePath, file.buffer); // Save the original file
 
-    //     return compressedImagePath; // Return the path of the compressed image
-    // }
+            const fileSizeInMB = file.size / (1024 * 1024);
+            let compressedImagePath = originalImagePath; // Default to original if no compression needed
 
-    // private generateFileUrl(req: Request, filePath: string): string {
-    //     const baseUrl = `${req.protocol}://${req.get('host')}/uploads/`;
-    //     return `${baseUrl}${path.basename(filePath)}`;
-    // }
+            // Check if compression is needed and handle it
+            if (fileSizeInMB > 1) {
+                compressedImagePath = await this.compressImage(file, uploadsDir, originalImagePath);
+            }
 
-    // async createFiles(dto: CreateFileDto, userId: number): Promise<FilesEntity> {
-    //     const fileEntity = this.FilesRepository.create({ ...dto, created_by: userId });
-    //     return this.FilesRepository.save(fileEntity);
-    // }
+            // Generate the file URL for either compressed or original image
+            const compressedImageUrl = this.generateFileUrl(req, compressedImagePath);
+
+            const fileDtoWithUrls: CreateFileDto = {
+                ...dto,
+                url: compressedImageUrl,
+            };
+
+            const fileEntity = await this.createFiles(fileDtoWithUrls, userId);
+            fileEntities.push(fileEntity); // Collect each file entity
+        }
+
+        return fileEntities; // Return all file entities
+    }
+
+    // The rest of the code remains the same...
+
+    private async compressImage(file: Express.Multer.File, uploadsDir: string, originalImagePath: string): Promise<string> {
+        const compressedImageName = `compressed-${Date.now()}-${file.originalname}`;
+        const compressedImagePath = path.join(uploadsDir, compressedImageName);
+        const format = file.mimetype.split('/')[1]; // Extract format (jpg, png, etc.)
+        const sharpInstance = sharp(file.buffer);
+
+        switch (format) {
+            case 'jpeg':
+            case 'jpg':
+                await sharpInstance.jpeg({ quality: 30 }).toFile(compressedImagePath);
+                break;
+            case 'png':
+                await sharpInstance.jpeg({ quality: 100 }).toFile(compressedImagePath); // Convert PNG to JPEG
+                break;
+            case 'webp':
+                await sharpInstance.webp({ quality: 60 }).toFile(compressedImagePath);
+                break;
+            case 'gif':
+                await sharpInstance.gif({ effort: 3 }).toFile(compressedImagePath);
+                break;
+            default:
+                await fs.copyFile(originalImagePath, compressedImagePath);
+                break;
+        }
+
+        return compressedImagePath; // Return the path of the compressed image
+    }
+
+    private generateFileUrl(req: Request, filePath: string): string {
+        const baseUrl = `${req.protocol}://${req.get('host')}/uploads/`;
+        return `${baseUrl}${path.basename(filePath)}`;
+    }
+
+    async createFiles(dto: CreateFileDto, userId: number): Promise<FilesEntity> {
+        const fileEntity = this.FilesRepository.create({ ...dto, created_by: userId });
+        return this.FilesRepository.save(fileEntity);
+    }
 
 
 
     //update 
-   
-   
-   // Validate upload rules based on category, sub-category and bathroom type if applicable
-  
-  
-   private validateUploadRules(
-    files: Express.Multer.File[],
-    category: string,
-    subCategory: string,
-    bathroomType?: string
-): void {
-    const uploadRules = getUploadRules(category, subCategory, bathroomType);
-
-    const requiredImages = uploadRules.images;
-    const requiredVideo = uploadRules.video;
-
-    // Count uploaded images
-    const imageFiles = files.filter(file => file.mimetype.startsWith('image'));
-    const videoFiles = files.filter(file => file.mimetype.startsWith('video'));
-
-    // Validate number of images
-    Object.keys(requiredImages).forEach(imageType => {
-        const requiredCount = requiredImages[imageType];
-        const uploadedCount = imageFiles.filter(file => file.fieldname === imageType).length;
-        if (uploadedCount < requiredCount) {
-            throw new Error(`Insufficient images for ${imageType}. Required: ${requiredCount}, Uploaded: ${uploadedCount}`);
-        }
-    });
-
-    // Validate number of videos
-    if (videoFiles.length < requiredVideo) {
-        throw new Error(`Insufficient video files. Required: ${requiredVideo}, Uploaded: ${videoFiles.length}`);
-    }
-}
-
-async compressAndSaveImage(
-    files: Express.Multer.File[],
-    userId: number,
-    dto: CreateFileDto,
-    req: Request,
-    id: number,
-): Promise<FilesEntity[]> {
-    // Step 1: Fetch category and subCategory details
-    const category = await this.categoryService.findOne(id);
-    const subCategory = await this.subCategoryService.findOne(id);
-
-    if (!category || !subCategory) {
-        throw new NotFoundException('Invalid category or subcategory');
-    }
-
-    // Step 2: Validate upload rules based on category, subCategory, and bathroomType
-    this.validateUploadRules(files, category.category_name, subCategory.sub_category_name, );
-
-    // Step 3: Create the upload directory
-    const uploadsDir = path.resolve(process.cwd(), 'uploads');
-    await fs.mkdir(uploadsDir, { recursive: true });
-
-    const savedFiles: FilesEntity[] = [];
-
-    // Step 4: Iterate over all the files
-    for (const file of files) {
-        const originalImagePath = path.join(uploadsDir, file.originalname);
-        await fs.writeFile(originalImagePath, file.buffer); // Save the original file
-
-        const fileSizeInMB = file.size / (1024 * 1024);
-        let compressedImagePath = originalImagePath; // Default to original if no compression needed
-
-        // Step 5: Compress image if needed
-        if (fileSizeInMB > 1) {
-            compressedImagePath = await this.compressImage(file, uploadsDir, originalImagePath);
-        }
-
-        // Step 6: Generate file URL
-        const compressedImageUrl = this.generateFileUrl(req, compressedImagePath);
-
-        // Step 7: Save file info in DB
-        const fileDtoWithUrls: CreateFileDto = {
-            ...dto,
-            url: compressedImageUrl,
-            
-        };
-
-        // Create and save each file entity
-        const savedFile = await this.createFiles(fileDtoWithUrls, userId);
-        savedFiles.push(savedFile);
-    }
-
-    return savedFiles; // Return the saved files entities
-}
-
-private async compressImage(
-    file: Express.Multer.File,
-    uploadsDir: string,
-    originalImagePath: string
-): Promise<string> {
-    const compressedImageName = `compressed-${Date.now()}-${file.originalname}`;
-    const compressedImagePath = path.join(uploadsDir, compressedImageName);
-    const format = file.mimetype.split('/')[1]; // Extract format (jpg, png, etc.)
-    const sharpInstance = sharp(file.buffer);
-
-    switch (format) {
-        case 'jpeg':
-        case 'jpg':
-            await sharpInstance.jpeg({ quality: 30 }).toFile(compressedImagePath);
-            break;
-        case 'png':
-            await sharpInstance.jpeg({ quality: 100 }).toFile(compressedImagePath); // Convert PNG to JPEG
-            break;
-        case 'webp':
-            await sharpInstance.webp({ quality: 60 }).toFile(compressedImagePath);
-            break;
-        case 'gif':
-            await sharpInstance.gif({ effort: 3 }).toFile(compressedImagePath);
-            break;
-        default:
-            await fs.copyFile(originalImagePath, compressedImagePath);
-            break;
-    }
-
-    return compressedImagePath; // Return the path of the compressed image
-}
-
-private generateFileUrl(req: Request, filePath: string): string {
-    const baseUrl = `${req.protocol}://${req.get('host')}/uploads/`;
-    return `${baseUrl}${path.basename(filePath)}`;
-}
-
-async createFiles(dto: CreateFileDto, userId: number): Promise<FilesEntity> {
-    const fileEntity = this.FilesRepository.create({ ...dto, created_by: userId });
-    return this.FilesRepository.save(fileEntity);
-}
-   
-   
     async updateFiles(id: number, Dto: UpdateFileDto): Promise<FilesEntity> {
         await this.FilesRepository.update(id, Dto);
         return this.FilesRepository.findOne({ where: { id } });

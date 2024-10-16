@@ -28,4 +28,6 @@ export class CreateFileDto {
           'Invalid format. Accepted formats are: jpg, jpeg, png, gif, mp4, avi, mkv, pdf, doc, docx',
   })
   format: string;
+
+  property_id :number
 }

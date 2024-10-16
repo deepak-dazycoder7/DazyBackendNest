@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Put, Param, Inject, Get, UseGuards, Req, UploadedFile, UseInterceptors, ParseIntPipe } from '@nestjs/common';
+import { Body, Controller, Post, Put, Param, Inject, Get, UseGuards, Req, UploadedFile, UseInterceptors, ParseIntPipe, BadRequestException } from '@nestjs/common';
 import { FilesService } from './Files.service';
 import { CreateFileDto } from './dtos/create.file.dto';
 import { UpdateFileDto } from './dtos/update.file.dto';
@@ -10,6 +10,7 @@ import { CreateFilesHandler, ReadFilesHandler, UpdateFilesHandler } from './perm
 import { FilesGuard } from './guard/files.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FilesEntity } from './entity/file.entity';
+import { PropertyService } from '../property.service';
 ;
 
 @Controller()
@@ -17,6 +18,7 @@ import { FilesEntity } from './entity/file.entity';
 export class FilesController {
   constructor(
     private readonly FilesService: FilesService,
+    private readonly propertyService: PropertyService,
     @Inject('CREATE_RESPONSE') private readonly ResponseService
   ) { }
 
@@ -24,21 +26,36 @@ export class FilesController {
   @SetMetadata(CHECK_POLICIES_KEY, [new CreateFilesHandler()])
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile() file: Express.Multer.File[],
     @Body() createFileDto: CreateFileDto,
     @I18n() i18n: I18nContext,
     @Req() req: CustomRequest,
+    @Param('propertyId') propertyId: number, // Property ID from the request URL
   ): Promise<FilesEntity> {
     try {
-
+      if (!file || file.length === 0) {
+        throw new BadRequestException('No files uploaded');
+      }
       const createdBy = req.user?.sub;
-      const createdFile = await this.FilesService.compressAndSaveImage(file, createdBy, createFileDto, req);
-      return this.ResponseService(i18n.t('message.success.create', { args: { entity: 'Files' } }), 200, createdFile);
+      const createdFile = await this.FilesService.compressAndSaveImage(
+        file,
+        createdBy,
+        createFileDto,
+        req,
+        propertyId
+      );
+
+      return this.ResponseService(
+        i18n.t('message.success.create', { args: { entity: 'Files' } }),
+        200,
+        createdFile
+      );
     } catch (error) {
       console.error('Error uploading file:', error);
       return this.ResponseService(error.message, 400, null);
     }
   }
+
 
 
 

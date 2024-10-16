@@ -62,10 +62,10 @@ const propertyUploadRules = {
                 kitchen: 2,
                 frontSide: 2,
                 balconyView: 2,
-                garden: 2, // If applicable
-                gym: 2,    // If applicable
-                diningArea: 2, // If applicable
-                walkingArea: 2, // If applicable
+                garden: 2,
+                gym: 2,    
+                diningArea: 2, 
+                walkingArea: 2, 
             },
             video: 1,
         },
@@ -77,10 +77,10 @@ const propertyUploadRules = {
                 kitchen: 2,
                 frontSide: 2,
                 balconyView: 2,
-                garden: 2, // If applicable
-                gym: 2,    // If applicable
-                diningArea: 2, // If applicable
-                walkingArea: 2, // If applicable
+                garden: 2, 
+                gym: 2,   
+                diningArea: 2, 
+                walkingArea: 2, 
             },
             video: 1,
         },
@@ -228,10 +228,10 @@ const propertyUploadRules = {
                 kitchen: 2,
                 frontSide: 2,
                 balconyView: 2,
-                garden: 2, // If applicable
-                gym: 2,    // If applicable
-                diningArea: 2, // If applicable
-                walkingArea: 2, // If applicable
+                garden: 2, 
+                gym: 2,
+                diningArea: 2,
+                walkingArea: 2,
             },
             video: 1,
         },
@@ -239,7 +239,7 @@ const propertyUploadRules = {
 };
 
   
-  export function getUploadRules(category: string, subCategory: string, bathroomType?: string) {
+  export function getUploadRules(category?: any, subCategory?: any, bathroomType?: string) {
     if (!propertyUploadRules[category]) {
       throw new Error(`Invalid category: ${category}`);
     }

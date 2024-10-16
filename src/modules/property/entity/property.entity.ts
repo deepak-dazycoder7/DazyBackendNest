@@ -25,6 +25,18 @@ export class PropertyEntity {
   @Column({ default: true })
   status: boolean;
 
+  @Column({ type: 'int' })
+  division_id: number;
+
+  @Column({ type: 'int' })
+  propertyType_id: number;
+
+  @Column({ type: 'int' })
+  category_id: number;
+
+  @Column({ type: 'int' })
+  subCategory_id: number;
+
   @CreateDateColumn({
     type: 'timestamp',
     precision: 0,

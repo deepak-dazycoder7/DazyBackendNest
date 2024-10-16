@@ -9,7 +9,7 @@ import { PropertyEntity } from '../Property/entity/property.entity';
 
 @Global()
 @Module({
-    imports:[
+    imports: [
         TypeOrmModule.forFeature([PropertyEntity]),  // Register the entity here
 
         AuthModule,
@@ -21,8 +21,12 @@ import { PropertyEntity } from '../Property/entity/property.entity';
         {
             provide: 'CREATE_RESPONSE',
             useValue: ResponseService,
-        },
+        }
     ],
-    exports: ['CREATE_RESPONSE'],
+    exports: ['CREATE_RESPONSE',
+        PropertyModule,
+        AuthModule,
+        CountryModule
+    ],
 })
-export class CommonModule {}
+export class CommonModule { }

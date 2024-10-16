@@ -21,6 +21,9 @@ export class FilesEntity {
     @Column({ type: 'varchar', length: 30, nullable: true, default: null })
     format: string; // e.g., 'jpg', 'png', 'mp4', 'pdf'
 
+    @Column({ type: 'int' })
+    property_id: number;   
+
     @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     @Exclude()
     created_at: Date;

@@ -61,7 +61,7 @@ import { FilesModule } from './files/files.module';
     FilesModule
   ],
   controllers: [PropertyController],
-  providers: [PropertyService, PropertyAbilityFactory, PropertyGuard,],
+  providers: [PropertyService, PropertyAbilityFactory, PropertyGuard ],
   exports: [PropertyService, PropertyAbilityFactory]
 })
 export class PropertyModule { }
